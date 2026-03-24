@@ -30,10 +30,11 @@
     const pillRect = pill.getBoundingClientRect();
     const linkRect = linkEl.getBoundingClientRect();
 
-    const left  = linkRect.left - pillRect.left;
-    const width = linkRect.width;
+    const width = linkRect.width * 0.7; // 60% width
 
-    indicator.style.left  = left  + "px";
+    const left = (linkRect.left - pillRect.left) + (linkRect.width - width) /2 -3;
+
+    indicator.style.left  = left + "px";
     indicator.style.width = width + "px";
   }
 
