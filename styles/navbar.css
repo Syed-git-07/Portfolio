@@ -67,8 +67,8 @@
 .nav-indicator {
   position: absolute;
   top: -3px;           /* floats just above the pill top edge */
-  height: 7px;
-  border-radius: 7px;
+  height: 5px;
+  border-radius: 0px 0px 5px 5px;
 
   /* Pure white bar */
   background: #f5eeee;
@@ -166,6 +166,7 @@
 }
 
 .nav-cta:active { transform: translateY(0); }
+
 
 /* ── Hamburger ───────────────────────────────────── */
 .hamburger {
