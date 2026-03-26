@@ -24,19 +24,17 @@
    * Move the indicator bar to sit on top of the given link element.
    * Position is relative to the pill container.
    */
-  function moveIndicator(linkEl) {
-    if (!linkEl || !pill || !indicator) return;
+function moveIndicator(linkEl) {
+  if (!linkEl || !pill || !indicator) return;
 
-    const pillRect = pill.getBoundingClientRect();
-    const linkRect = linkEl.getBoundingClientRect();
+  const shrink = 30; // 👈 adjust this (8–14 ideal)
 
-    const width = linkRect.width * 0.7; // 60% width
+  const width = linkEl.offsetWidth - shrink;
+  const left  = linkEl.offsetLeft + shrink / 2;
 
-    const left = (linkRect.left - pillRect.left) + (linkRect.width - width) /2 -3;
-
-    indicator.style.left  = left + "px";
-    indicator.style.width = width + "px";
-  }
+  indicator.style.width = width + "px";
+  indicator.style.left  = left + "px";
+}
 
   /* Set indicator on the active link immediately on load */
   function initIndicator() {
