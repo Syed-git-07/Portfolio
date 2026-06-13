@@ -58,6 +58,11 @@
   --tag-text:       #93c5fd;
   --tag-border:     rgba(99, 179, 237, 0.2);
 
+  /* PDF Button */
+  --pdf-btn-bg:     rgba(248, 113, 113, 0.08);
+  --pdf-btn-border: rgba(248, 113, 113, 0.2);
+  --pdf-btn-text:   #f87171;
+
   /* Gradient */
   --hero-grad:      linear-gradient(135deg, #0d1b2a 0%, #0f2342 50%, #080b12 100%);
   --accent-grad:    linear-gradient(135deg, #63b3ed, #9f7aea);
@@ -106,6 +111,10 @@
   --tag-bg:         rgba(37, 99, 235, 0.07);
   --tag-text:       #1d4ed8;
   --tag-border:     rgba(37, 99, 235, 0.18);
+
+  --pdf-btn-bg:     rgba(220, 38, 38, 0.06);
+  --pdf-btn-border: rgba(220, 38, 38, 0.18);
+  --pdf-btn-text:   #dc2626;
 
   --hero-grad:      linear-gradient(135deg, #dbeafe 0%, #eff6ff 50%, #f0f6ff 100%);
   --accent-grad:    linear-gradient(135deg, #2563eb, #7c3aed);
@@ -787,6 +796,7 @@ main { position: relative; z-index: 1; }
   background: linear-gradient(135deg, var(--accent-glow), transparent 60%);
   opacity: 0;
   transition: opacity 0.3s ease;
+  pointer-events: none;
 }
 
 .project-card:hover {
@@ -1093,6 +1103,44 @@ main { position: relative; z-index: 1; }
   color: var(--text-muted);
   text-transform: uppercase;
   letter-spacing: 0.06em;
+}
+
+.cert-footer {
+  margin-top: 24px;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.cert-link-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: var(--pdf-btn-bg);
+  border: 1px solid var(--pdf-btn-border);
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--pdf-btn-text);
+  text-decoration: none;
+  transition: all 0.22s ease;
+}
+
+.cert-link-btn svg {
+  flex-shrink: 0;
+  transition: transform 0.22s ease;
+}
+
+.cert-link-btn:hover {
+  background: #ef4444;
+  border-color: #ef4444;
+  color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.25);
+}
+
+.cert-link-btn:hover svg {
+  transform: scale(1.1);
 }
 
 /* ══════════════════════════════════════════════════

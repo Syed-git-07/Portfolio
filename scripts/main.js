@@ -105,16 +105,43 @@
         return;
       }
 
-      /* Simulate sending */
       submitBtn.textContent = "Sending…";
       submitBtn.disabled    = true;
 
-      setTimeout(function () {
-        form.reset();
-        submitBtn.innerHTML = 'Send Message <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>';
-        submitBtn.disabled  = false;
-        showToast("Thanks " + name + "! Message sent. Syed will get back to you soon 🚀", false);
-      }, 1600);
+      var action = form.getAttribute("action");
+      if (action && action.indexOf("YOUR_FORMSPREE_ID") === -1 && action !== "#" && action !== "") {
+        // Send actual form submission to Formspree!
+        fetch(action, {
+          method: "POST",
+          body: new FormData(form),
+          headers: {
+            "Accept": "application/json"
+          }
+        })
+        .then(function (response) {
+          if (response.ok) {
+            form.reset();
+            showToast("Thanks " + name + "! Your message has been sent successfully 🚀", false);
+          } else {
+            showToast("Oops! There was a problem sending your message. Please try again.", true);
+          }
+        })
+        .catch(function (error) {
+          showToast("Network error. Please check your connection and try again.", true);
+        })
+        .finally(function () {
+          submitBtn.innerHTML = 'Send Message <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>';
+          submitBtn.disabled  = false;
+        });
+      } else {
+        // Simulate sending (form is still set to placeholder ID)
+        setTimeout(function () {
+          form.reset();
+          submitBtn.innerHTML = 'Send Message <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>';
+          submitBtn.disabled  = false;
+          showToast("Simulated Success! Set your Formspree ID in index.html to receive real emails 📧", false);
+        }, 1200);
+      }
     });
   }
 
