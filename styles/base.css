@@ -689,6 +689,20 @@ main { position: relative; z-index: 1; }
   box-shadow: 0 4px 16px var(--accent-glow);
 }
 
+.resume-pill {
+  border-color: var(--pdf-btn-border);
+  color: var(--pdf-btn-text);
+  background: var(--pdf-btn-bg);
+}
+
+.resume-pill:hover {
+  background: var(--pdf-btn-bg);
+  border-color: var(--pdf-btn-text);
+  color: var(--pdf-btn-text);
+  box-shadow: 0 4px 16px rgba(248, 113, 113, 0.15) !important;
+}
+
+
 /* ── Education Timeline ── */
 .education-timeline {
   display: flex;

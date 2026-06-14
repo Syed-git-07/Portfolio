@@ -180,6 +180,17 @@
     });
   });
 
+  /* Close mobile menu on CTA click */
+  const mobileCtas = mobileMenu ? mobileMenu.querySelectorAll(".mobile-cta") : [];
+  mobileCtas.forEach(function (cta) {
+    cta.addEventListener("click", function () {
+      mobileMenu.classList.remove("open");
+      hamburger.classList.remove("open");
+      hamburger.setAttribute("aria-expanded", "false");
+    });
+  });
+
+
   /* Close mobile menu on outside click */
   document.addEventListener("click", function (e) {
     if (header && !header.contains(e.target)) {

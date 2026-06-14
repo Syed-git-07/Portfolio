@@ -232,6 +232,37 @@
   box-shadow: 0 6px 20px var(--accent-glow);
 }
 
+/* ── Resume Buttons ──────────────────────────────── */
+.nav-right .nav-resume-btn {
+  background: transparent;
+  color: var(--text-primary);
+  border: 1px solid var(--border-strong);
+  margin-right: 4px;
+  box-shadow: none;
+}
+
+.nav-right .nav-resume-btn:hover {
+  background: var(--surface-hover);
+  border-color: var(--accent);
+  color: var(--accent);
+  box-shadow: 0 4px 12px var(--accent-glow);
+}
+
+.mobile-menu .mobile-resume-cta {
+  background: transparent;
+  color: var(--text-primary);
+  border: 1px solid var(--border-strong);
+  margin-top: 8px;
+  box-shadow: none;
+}
+
+.mobile-menu .mobile-resume-cta:hover {
+  background: var(--surface-hover);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+
 /* ── Hamburger ───────────────────────────────────── */
 .hamburger {
   display: none;
