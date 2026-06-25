@@ -1,0 +1,43 @@
+.boot-screen {
+  background-color: #000000;
+  color: #cccccc;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 14px;
+  width: 100vw;
+  height: 100vh;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  overflow: hidden;
+  cursor: default;
+}
+
+.boot-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.boot-line {
+  min-height: 1em; /* Keep space for empty lines */
+}
+
+.ascii-art {
+  color: #ffffff;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  font-family: 'Courier New', Courier, monospace;
+  font-weight: bold;
+  white-space: pre-wrap; /* or pre, depending on exact layout needs */
+}
+
+.boot-prompt {
+  margin-top: 20px;
+  animation: blink 1s step-end infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}

@@ -1,0 +1,110 @@
+.login-screen {
+  width: 100vw;
+  height: 100vh;
+  background-color: var(--os-desktop-bg);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.login-dialog {
+  width: 400px;
+  background-color: var(--os-window-bg);
+  display: flex;
+  flex-direction: column;
+}
+
+.login-header {
+  background: linear-gradient(90deg, var(--os-title-active), #1084d0);
+  color: var(--os-title-text);
+  padding: 3px 5px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+}
+
+.login-body {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.users-list {
+  display: flex;
+  gap: 30px;
+  justify-content: center;
+}
+
+.user-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  padding: 10px;
+  border: 1px dotted transparent;
+}
+
+.user-card:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.user-card.selected {
+  background-color: var(--os-title-active);
+  color: var(--os-title-text);
+  border: 1px dotted var(--os-highlight);
+}
+
+.user-icon {
+  font-size: 40px;
+  margin-bottom: 10px;
+  background-color: white;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 2px solid;
+  border-color: var(--os-shadow) var(--os-highlight) var(--os-highlight) var(--os-shadow);
+  color: black;
+}
+
+.user-name {
+  font-size: 14px;
+}
+
+.login-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  align-items: center;
+  height: 80px; /* Fixed height to prevent jumping */
+}
+
+.password-form {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  position: relative;
+}
+
+.os-input {
+  padding: 2px 4px;
+  font-family: var(--font-pixel);
+  outline: none;
+}
+
+.error-msg {
+  color: red;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  font-size: 11px;
+  margin-top: 5px;
+}
+
+.login-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: auto;
+}

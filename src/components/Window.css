@@ -1,0 +1,56 @@
+.window {
+  position: absolute;
+  width: 400px;
+  min-height: 200px;
+  display: flex;
+  flex-direction: column;
+  padding: 2px;
+  background-color: var(--os-window-bg);
+  user-select: none;
+}
+
+.window-titlebar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--os-title-inactive);
+  padding: 2px;
+  color: var(--os-title-text);
+  font-weight: bold;
+}
+
+.window-titlebar.active {
+  background: linear-gradient(90deg, var(--os-title-active), #1084d0);
+}
+
+.window-title {
+  padding-left: 2px;
+}
+
+.window-controls {
+  display: flex;
+  gap: 2px;
+}
+
+.window-btn {
+  padding: 0;
+  width: 16px;
+  height: 14px;
+  font-size: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+}
+
+.window-content {
+  flex: 1;
+  background-color: white;
+  border: 2px solid;
+  border-color: var(--os-shadow) var(--os-highlight) var(--os-highlight) var(--os-shadow);
+  margin-top: 2px;
+  padding: 10px;
+  overflow: auto;
+  color: black;
+  user-select: text;
+}

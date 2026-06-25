@@ -1,0 +1,38 @@
+.desktop {
+  width: 100vw;
+  height: 100vh;
+  background-color: var(--os-desktop-bg);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.desktop-icons-grid {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  gap: 15px;
+  padding: 10px;
+}
+
+.desktop-icon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 60px;
+  cursor: pointer;
+  color: white;
+  text-shadow: 1px 1px 1px black;
+  gap: 5px;
+}
+
+.desktop-icon:active .icon-img,
+.desktop-icon:active span {
+  background-color: rgba(0, 0, 128, 0.5); /* Navy transparent */
+}
+
+.icon-img {
+  font-size: 32px;
+}
