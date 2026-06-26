@@ -13,26 +13,45 @@
   flex-direction: column;
   flex-wrap: wrap;
   align-content: flex-start;
-  gap: 15px;
-  padding: 10px;
+  gap: 12px;
+  padding: 15px;
 }
 
 .desktop-icon {
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 60px;
+  justify-content: center;
+  width: 72px;
+  padding: 8px 4px;
   cursor: pointer;
   color: white;
-  text-shadow: 1px 1px 1px black;
-  gap: 5px;
+  text-shadow: 1px 1px 1px #000000;
+  gap: 6px;
+  border: 1px dotted transparent;
+  transition: background-color 0.1s, border-color 0.1s;
 }
 
-.desktop-icon:active .icon-img,
-.desktop-icon:active span {
-  background-color: rgba(0, 0, 128, 0.5); /* Navy transparent */
+.desktop-icon:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.desktop-icon:active {
+  background-color: rgba(0, 0, 128, 0.4);
+  border-color: var(--os-highlight);
+}
+
+.desktop-icon span {
+  font-size: 11px;
+  text-align: center;
+  word-break: break-word;
+  padding: 1px 3px;
+  line-height: 1.2;
 }
 
 .icon-img {
   font-size: 32px;
+  filter: drop-shadow(1px 2px 2px rgba(0, 0, 0, 0.3));
 }
+

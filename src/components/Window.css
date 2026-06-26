@@ -54,3 +54,30 @@
   color: black;
   user-select: text;
 }
+
+/* Classic retro scrollbars */
+.window-content::-webkit-scrollbar {
+  width: 16px;
+  height: 16px;
+}
+
+.window-content::-webkit-scrollbar-track {
+  background-color: #e6e6e6;
+  background-image: radial-gradient(#c0c0c0 25%, transparent 25%),
+                    radial-gradient(#c0c0c0 25%, transparent 25%);
+  background-size: 4px 4px;
+  background-position: 0 0, 2px 2px;
+  box-shadow: inset 1px 1px 0 var(--os-shadow);
+}
+
+.window-content::-webkit-scrollbar-thumb {
+  background-color: var(--os-window-bg);
+  border: 2px solid;
+  border-color: var(--os-highlight) var(--os-dark-shadow) var(--os-dark-shadow) var(--os-highlight);
+}
+
+.window-content::-webkit-scrollbar-thumb:active {
+  background-color: #d4d0c8;
+  border-color: var(--os-dark-shadow) var(--os-highlight) var(--os-highlight) var(--os-dark-shadow);
+}
+

@@ -1,81 +1,89 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useOs } from '../context/osContext';
 import './LoginScreen.css';
 
 const LoginScreen = () => {
   const { setSystemState } = useOs();
-  const [selectedUser, setSelectedUser] = useState(null);
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState(false);
+  const okButtonRef = useRef(null);
+
+  useEffect(() => {
+    // Focus the OK button automatically on mount for quick login with Enter key
+    if (okButtonRef.current) {
+      okButtonRef.current.focus();
+    }
+  }, []);
 
   const handleLogin = (e) => {
-    e.preventDefault();
-    if (selectedUser === 'guest') {
-      setSystemState('desktop');
-    } else if (selectedUser === 'admin') {
-      if (password === 'admin') { // simple password for now
-        setSystemState('desktop');
-      } else {
-        setError(true);
-        setPassword('');
-      }
-    }
+    if (e) e.preventDefault();
+    setSystemState('desktop');
   };
 
   return (
     <div className="login-screen">
       <div className="login-dialog os-panel">
         <div className="login-header">
-          <span className="login-title">Welcome to OS Portfolio</span>
+          <span className="login-title">Log On to Windows Portfolio</span>
+          <div className="login-header-icon">💻</div>
         </div>
-        <div className="login-body">
-          <div className="users-list">
-            <div 
-              className={`user-card ${selectedUser === 'guest' ? 'selected' : ''}`}
-              onClick={() => { setSelectedUser('guest'); setError(false); }}
-            >
-              <div className="user-icon">👤</div>
-              <div className="user-name">Guest</div>
-            </div>
-            <div 
-              className={`user-card ${selectedUser === 'admin' ? 'selected' : ''}`}
-              onClick={() => { setSelectedUser('admin'); setError(false); }}
-            >
-              <div className="user-icon admin-icon">🔑</div>
-              <div className="user-name">Administrator</div>
+        <div className="login-body-wrapper">
+          <div className="login-sidebar">
+            <div className="sidebar-brand-text">
+              <span>OS</span>
+              <span className="version-tag">98</span>
             </div>
           </div>
-
-          <div className="login-controls">
-            {selectedUser === 'admin' && (
-              <form onSubmit={handleLogin} className="password-form">
-                <label>Password:</label>
+          <div className="login-main-form">
+            <form onSubmit={handleLogin} className="logon-form">
+              <div className="logon-instruction">
+                Type a user name and password to log on.
+              </div>
+              
+              <div className="form-row">
+                <label htmlFor="username">User name:</label>
                 <input 
-                  type="password" 
-                  className="os-input os-panel-inset"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  autoFocus
+                  id="username"
+                  type="text" 
+                  className="os-input os-panel-inset logon-input" 
+                  value="Guest" 
+                  disabled 
+                  readOnly 
                 />
-                {error && <div className="error-msg">Incorrect password.</div>}
-              </form>
-            )}
-            
-            <div className="login-actions">
-              <button 
-                className="os-btn" 
-                onClick={handleLogin}
-                disabled={!selectedUser}
-              >
-                OK
-              </button>
-              <button 
-                className="os-btn"
-                onClick={() => setSystemState('boot')}
-              >
-                Restart
-              </button>
-            </div>
+              </div>
+
+              <div className="form-row">
+                <label htmlFor="password">Password:</label>
+                <input 
+                  id="password"
+                  type="password" 
+                  className="os-input os-panel-inset logon-input password-disabled" 
+                  value="" 
+                  placeholder="(None required)"
+                  disabled 
+                  readOnly 
+                />
+              </div>
+
+              <div className="logon-tip">
+                * Click OK to log on. No password is required.
+              </div>
+
+              <div className="login-actions">
+                <button 
+                  type="submit"
+                  ref={okButtonRef}
+                  className="os-btn logon-btn default-btn"
+                >
+                  OK
+                </button>
+                <button 
+                  type="button"
+                  className="os-btn logon-btn"
+                  onClick={() => setSystemState('boot')}
+                >
+                  Restart
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       </div>
@@ -84,3 +92,4 @@ const LoginScreen = () => {
 };
 
 export default LoginScreen;
+
