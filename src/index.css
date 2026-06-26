@@ -9,7 +9,7 @@
   --os-shadow: #808080;
   --os-dark-shadow: #000000;
   --os-taskbar-bg: #c0c0c0;
-  --font-pixel: 'Tahoma', 'Verdana', 'Segoe UI', sans-serif;
+  --font-pixel: 'Tahoma', 'Segoe UI', 'Verdana', sans-serif;
 }
 
 * {
@@ -24,11 +24,12 @@ body {
   font-size: 12px;
   background-color: var(--os-desktop-bg);
   color: var(--os-window-text);
-  overflow: hidden; /* Prevent scrolling on desktop */
-  user-select: none; /* Make it feel more like an app */
+  overflow: hidden;
+  user-select: none;
+  -webkit-font-smoothing: antialiased;
 }
 
-/* Classic Windows 95 Button Style */
+/* Classic Windows 95/98 Button */
 .os-btn {
   background-color: var(--os-window-bg);
   border: 2px solid;
@@ -38,14 +39,19 @@ body {
   font-size: 12px;
   color: var(--os-window-text);
   cursor: pointer;
+  white-space: nowrap;
+}
+
+.os-btn:hover {
+  filter: brightness(1.04);
 }
 
 .os-btn:active {
   border-color: var(--os-dark-shadow) var(--os-highlight) var(--os-highlight) var(--os-dark-shadow);
-  padding: 3px 7px 1px 9px; /* Shift text slightly when pressed */
+  padding: 3px 7px 1px 9px;
 }
 
-/* Common Windows 95 Panel (Inset or Outset) */
+/* Windows Panel Styles */
 .os-panel {
   background-color: var(--os-window-bg);
   border: 2px solid;
@@ -56,4 +62,9 @@ body {
   background-color: #ffffff;
   border: 2px solid;
   border-color: var(--os-shadow) var(--os-highlight) var(--os-highlight) var(--os-shadow);
+}
+
+.os-input {
+  font-family: var(--font-pixel);
+  font-size: 12px;
 }

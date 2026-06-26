@@ -1,10 +1,52 @@
 .desktop {
   width: 100vw;
   height: 100vh;
-  background-color: var(--os-desktop-bg);
   position: relative;
   display: flex;
   flex-direction: column;
+}
+
+.desktop-watermark {
+  position: absolute;
+  bottom: 36px;
+  right: 16px;
+  pointer-events: none;
+  opacity: 0.35;
+}
+
+.desktop-watermark span {
+  font-family: 'Trebuchet MS', sans-serif;
+  font-size: 14px;
+  font-weight: bold;
+  color: #fff;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+  letter-spacing: 1px;
+}
+
+.desktop-welcome {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 220px;
+  padding: 2px;
+  z-index: 0;
+  opacity: 0.92;
+}
+
+.welcome-titlebar {
+  background: linear-gradient(90deg, var(--os-title-active), #1084d0);
+  color: #fff;
+  font-weight: bold;
+  font-size: 11px;
+  padding: 3px 6px;
+}
+
+.desktop-welcome p {
+  padding: 8px 10px;
+  font-size: 11px;
+  line-height: 1.4;
+  color: #000;
+  background: var(--os-window-bg);
 }
 
 .desktop-icons-grid {
@@ -13,45 +55,60 @@
   flex-direction: column;
   flex-wrap: wrap;
   align-content: flex-start;
-  gap: 12px;
-  padding: 15px;
+  gap: 4px;
+  padding: 16px;
+  z-index: 1;
 }
 
 .desktop-icon {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  width: 72px;
-  padding: 8px 4px;
+  justify-content: flex-start;
+  width: 76px;
+  padding: 6px 4px;
   cursor: pointer;
-  color: white;
-  text-shadow: 1px 1px 1px #000000;
-  gap: 6px;
+  gap: 4px;
   border: 1px dotted transparent;
-  transition: background-color 0.1s, border-color 0.1s;
+  border-radius: 1px;
 }
 
 .desktop-icon:hover {
-  background-color: rgba(255, 255, 255, 0.15);
-  border-color: rgba(255, 255, 255, 0.3);
+  background-color: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.25);
 }
 
-.desktop-icon:active {
-  background-color: rgba(0, 0, 128, 0.4);
-  border-color: var(--os-highlight);
+.desktop-icon.selected {
+  background-color: rgba(0, 0, 128, 0.55);
+  border-color: rgba(255, 255, 255, 0.6);
 }
 
-.desktop-icon span {
-  font-size: 11px;
-  text-align: center;
-  word-break: break-word;
-  padding: 1px 3px;
-  line-height: 1.2;
+.desktop-icon.selected .icon-label {
+  background-color: var(--os-title-active);
+  color: #fff;
+}
+
+.icon-img-wrap {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .icon-img {
-  font-size: 32px;
-  filter: drop-shadow(1px 2px 2px rgba(0, 0, 0, 0.3));
+  font-size: 30px;
+  filter: drop-shadow(1px 2px 2px rgba(0, 0, 0, 0.35));
+  line-height: 1;
 }
 
+.icon-label {
+  font-size: 11px;
+  text-align: center;
+  word-break: break-word;
+  padding: 1px 4px;
+  line-height: 1.2;
+  color: #fff;
+  text-shadow: 1px 1px 2px #000;
+  max-width: 72px;
+}

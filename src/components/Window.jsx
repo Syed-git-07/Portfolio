@@ -8,18 +8,28 @@ import CertificationsApp from '../apps/CertificationsApp';
 import AchievementsApp from '../apps/AchievementsApp';
 import './Window.css';
 
+const APP_ICONS = {
+  AboutApp: '📝',
+  ProjectsApp: '📁',
+  SkillsApp: '🛠️',
+  CertificationsApp: '📜',
+  AchievementsApp: '🏆',
+  ContactApp: '📧',
+};
+
 const Window = ({ app }) => {
   const { id, title, component, isMinimized, zIndex } = app;
-  const { closeWindow, minimizeWindow, focusWindow } = useOs();
-  
-  const [position, setPosition] = useState({ x: 100 + zIndex * 10, y: 50 + zIndex * 10 });
+  const { closeWindow, minimizeWindow, focusWindow, activeWindowId } = useOs();
+
+  const [position, setPosition] = useState({ x: 80 + zIndex * 12, y: 40 + zIndex * 12 });
   const [isMaximized, setIsMaximized] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const dragStartPos = useRef({ x: 0, y: 0 });
   const windowStartPos = useRef({ x: 0, y: 0 });
 
+  const isActive = activeWindowId === id;
+
   const handleMouseDown = (e) => {
-    // Only drag on title bar if not maximized
     if (!isMaximized && e.target.closest('.window-titlebar') && !e.target.closest('.window-controls')) {
       setIsDragging(true);
       dragStartPos.current = { x: e.clientX, y: e.clientY };
@@ -35,14 +45,12 @@ const Window = ({ app }) => {
         const dy = e.clientY - dragStartPos.current.y;
         setPosition({
           x: windowStartPos.current.x + dx,
-          y: Math.max(0, windowStartPos.current.y + dy) // prevent going above screen
+          y: Math.max(0, windowStartPos.current.y + dy),
         });
       }
     };
 
-    const handleMouseUp = () => {
-      setIsDragging(false);
-    };
+    const handleMouseUp = () => setIsDragging(false);
 
     if (isDragging) {
       document.addEventListener('mousemove', handleMouseMove);
@@ -57,43 +65,48 @@ const Window = ({ app }) => {
 
   if (isMinimized) return null;
 
+  const renderApp = () => {
+    switch (component) {
+      case 'AboutApp': return <AboutApp />;
+      case 'ProjectsApp': return <ProjectsApp />;
+      case 'ContactApp': return <ContactApp />;
+      case 'SkillsApp': return <SkillsApp />;
+      case 'CertificationsApp': return <CertificationsApp />;
+      case 'AchievementsApp': return <AchievementsApp />;
+      default: return <div className="app-content">App Content: {title}</div>;
+    }
+  };
+
   return (
-    <div 
-      className={`window os-panel ${isMaximized ? 'maximized' : ''}`} 
-      style={{ 
-        left: isMaximized ? 0 : position.x, 
-        top: isMaximized ? 0 : position.y, 
-        zIndex: zIndex,
-        width: isMaximized ? '100vw' : '480px',
-        height: isMaximized ? 'calc(100vh - 30px)' : '420px',
+    <div
+      className={`window os-panel ${isMaximized ? 'maximized' : ''} ${isActive ? 'focused' : ''}`}
+      style={{
+        left: isMaximized ? 0 : position.x,
+        top: isMaximized ? 0 : position.y,
+        zIndex,
+        width: isMaximized ? '100vw' : '500px',
+        height: isMaximized ? 'calc(100vh - 30px)' : '440px',
       }}
       onMouseDown={handleMouseDown}
     >
-      <div className={`window-titlebar ${zIndex > 1 ? 'active' : ''}`}>
-        <div className="window-title" style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
-          <span>💻</span>
+      <div className={`window-titlebar ${isActive ? 'active' : ''}`}>
+        <div className="window-title">
+          <span className="window-app-icon">{APP_ICONS[component] || '💻'}</span>
           <span>{title}</span>
         </div>
         <div className="window-controls">
-          <button className="os-btn window-btn" onClick={() => minimizeWindow(id)}>_</button>
-          <button className="os-btn window-btn" onClick={() => setIsMaximized(!isMaximized)}>
+          <button className="os-btn window-btn" onClick={() => minimizeWindow(id)} title="Minimize">_</button>
+          <button className="os-btn window-btn" onClick={() => setIsMaximized(!isMaximized)} title="Maximize">
             {isMaximized ? '❐' : '☐'}
           </button>
-          <button className="os-btn window-btn" onClick={() => closeWindow(id)}>X</button>
+          <button className="os-btn window-btn window-btn-close" onClick={() => closeWindow(id)} title="Close">✕</button>
         </div>
       </div>
-      <div className="window-content" style={{ height: 'calc(100% - 22px)', overflowY: 'auto' }}>
-        {component === 'AboutApp' && <AboutApp />}
-        {component === 'ProjectsApp' && <ProjectsApp />}
-        {component === 'ContactApp' && <ContactApp />}
-        {component === 'SkillsApp' && <SkillsApp />}
-        {component === 'CertificationsApp' && <CertificationsApp />}
-        {component === 'AchievementsApp' && <AchievementsApp />}
-        {component !== 'AboutApp' && component !== 'ProjectsApp' && component !== 'ContactApp' && component !== 'SkillsApp' && component !== 'CertificationsApp' && component !== 'AchievementsApp' && <div>App Content: {title}</div>}
+      <div className="window-content">
+        {renderApp()}
       </div>
     </div>
   );
 };
 
 export default Window;
-

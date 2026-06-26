@@ -1,61 +1,83 @@
 .window {
   position: absolute;
-  width: 400px;
   min-height: 200px;
   display: flex;
   flex-direction: column;
   padding: 2px;
   background-color: var(--os-window-bg);
   user-select: none;
+  box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.25);
+}
+
+.window.focused {
+  box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.35);
 }
 
 .window-titlebar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: var(--os-title-inactive);
-  padding: 2px;
+  background: linear-gradient(90deg, var(--os-title-inactive), #a0a0a0);
+  padding: 2px 3px;
   color: var(--os-title-text);
   font-weight: bold;
+  font-size: 11px;
+  cursor: default;
 }
 
 .window-titlebar.active {
-  background: linear-gradient(90deg, var(--os-title-active), #1084d0);
+  background: linear-gradient(90deg, var(--os-title-active) 0%, #1084d0 70%, #000080 100%);
 }
 
 .window-title {
   padding-left: 2px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.window-app-icon {
+  font-size: 12px;
+  flex-shrink: 0;
 }
 
 .window-controls {
   display: flex;
   gap: 2px;
+  flex-shrink: 0;
 }
 
 .window-btn {
   padding: 0;
   width: 16px;
   height: 14px;
-  font-size: 10px;
+  font-size: 9px;
   display: flex;
   justify-content: center;
   align-items: center;
   font-weight: bold;
+  line-height: 1;
+}
+
+.window-btn-close {
+  font-size: 10px;
 }
 
 .window-content {
   flex: 1;
-  background-color: white;
+  background-color: #fff;
   border: 2px solid;
   border-color: var(--os-shadow) var(--os-highlight) var(--os-highlight) var(--os-shadow);
   margin-top: 2px;
-  padding: 10px;
   overflow: auto;
-  color: black;
+  color: #000;
   user-select: text;
+  min-height: 0;
 }
 
-/* Classic retro scrollbars */
 .window-content::-webkit-scrollbar {
   width: 16px;
   height: 16px;
@@ -63,8 +85,9 @@
 
 .window-content::-webkit-scrollbar-track {
   background-color: #e6e6e6;
-  background-image: radial-gradient(#c0c0c0 25%, transparent 25%),
-                    radial-gradient(#c0c0c0 25%, transparent 25%);
+  background-image:
+    radial-gradient(#c0c0c0 25%, transparent 25%),
+    radial-gradient(#c0c0c0 25%, transparent 25%);
   background-size: 4px 4px;
   background-position: 0 0, 2px 2px;
   box-shadow: inset 1px 1px 0 var(--os-shadow);
@@ -80,4 +103,3 @@
   background-color: #d4d0c8;
   border-color: var(--os-dark-shadow) var(--os-highlight) var(--os-highlight) var(--os-dark-shadow);
 }
-

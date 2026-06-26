@@ -1,0 +1,273 @@
+.app-content {
+  padding: 12px;
+  font-family: var(--font-pixel);
+  font-size: 12px;
+  color: #000;
+  line-height: 1.45;
+}
+
+.app-heading {
+  margin: 0 0 10px;
+  padding-bottom: 4px;
+  border-bottom: 2px solid var(--os-shadow);
+  font-size: 13px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.app-subtext {
+  margin: 0 0 14px;
+  color: #444;
+  font-size: 11px;
+}
+
+.app-card {
+  background-color: #e8e8e8;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.app-card-inset {
+  background-color: #fff;
+  padding: 8px;
+  line-height: 1.45;
+}
+
+.app-tag {
+  background-color: #c0c0c0;
+  padding: 2px 6px;
+  font-size: 10px;
+  border: 1px solid #808080;
+  white-space: nowrap;
+}
+
+.app-badge {
+  padding: 2px 6px;
+  font-size: 10px;
+  background-color: #d4d0c8;
+  font-weight: bold;
+}
+
+.app-link-row {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.app-link-row a {
+  text-decoration: none;
+  color: #000;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.app-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 10px;
+}
+
+.app-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.app-list-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 12px;
+  background-color: #fff;
+  text-decoration: none;
+  color: #000;
+  transition: background-color 0.1s;
+}
+
+.app-list-item:hover {
+  background-color: #e8f0ff;
+}
+
+.app-list-item .item-icon-lg {
+  font-size: 24px;
+  flex-shrink: 0;
+}
+
+.app-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-left: 5px;
+}
+
+.app-timeline-item {
+  position: relative;
+  padding-left: 15px;
+  border-left: 2px solid var(--os-title-active);
+}
+
+.app-timeline-item.inactive {
+  border-left-color: var(--os-shadow);
+}
+
+.app-timeline-dot {
+  position: absolute;
+  left: -5px;
+  top: 2px;
+  width: 8px;
+  height: 8px;
+  background-color: var(--os-title-active);
+  border-radius: 50%;
+}
+
+.app-timeline-item.inactive .app-timeline-dot {
+  background-color: var(--os-shadow);
+}
+
+.app-timeline-title {
+  font-weight: bold;
+}
+
+.app-timeline-sub {
+  color: #444;
+}
+
+.app-timeline-meta {
+  font-size: 11px;
+  color: #777;
+}
+
+.app-profile-row {
+  display: flex;
+  gap: 18px;
+  margin-bottom: 18px;
+  align-items: flex-start;
+}
+
+.app-profile-photo {
+  width: 120px;
+  height: 140px;
+  border: 2px solid;
+  border-color: var(--os-shadow) var(--os-highlight) var(--os-highlight) var(--os-shadow);
+  object-fit: cover;
+  background-color: #e0e0e0;
+  flex-shrink: 0;
+}
+
+.app-profile-fallback {
+  display: none;
+  width: 120px;
+  height: 140px;
+  border: 2px solid var(--os-shadow);
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #000080, #1084d0);
+  color: #fff;
+  font-size: 28px;
+  font-weight: bold;
+  flex-shrink: 0;
+}
+
+.app-profile-name {
+  margin: 0 0 4px;
+  font-size: 18px;
+}
+
+.app-profile-role {
+  margin: 0 0 10px;
+  color: #555;
+  font-size: 13px;
+}
+
+.app-profile-detail {
+  margin: 0 0 4px;
+}
+
+.app-contact-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px;
+  background-color: #fff;
+  text-decoration: none;
+  color: #000;
+}
+
+.app-contact-row:hover {
+  background-color: #e8f0ff;
+}
+
+.app-contact-label {
+  font-weight: bold;
+  font-size: 10px;
+  color: #666;
+}
+
+.app-form {
+  padding: 14px;
+  background-color: #e8e8e8;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.app-form-row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.app-form-row label {
+  width: 60px;
+  flex-shrink: 0;
+}
+
+.app-form-row input,
+.app-form-row textarea {
+  flex: 1;
+  padding: 3px 5px;
+  outline: none;
+  border: 2px solid;
+  border-color: var(--os-shadow) var(--os-highlight) var(--os-highlight) var(--os-shadow);
+  font-family: var(--font-pixel);
+  font-size: 12px;
+}
+
+.app-form-row textarea {
+  height: 70px;
+  resize: none;
+}
+
+.app-form-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 4px;
+}
+
+.app-skill-header {
+  font-weight: bold;
+  border-bottom: 1px solid var(--os-shadow);
+  padding-bottom: 3px;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.app-skill-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.app-skill-tag {
+  background-color: #fff;
+  padding: 3px 8px;
+  font-size: 11px;
+  font-weight: 500;
+}

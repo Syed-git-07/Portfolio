@@ -1,5 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { useOs } from '../context/osContext';
+import { OS_NAME, OS_VERSION, USER_NAME } from '../constants/branding';
+import '../styles/wallpaper.css';
 import './LoginScreen.css';
 
 const LoginScreen = () => {
@@ -7,7 +9,6 @@ const LoginScreen = () => {
   const okButtonRef = useRef(null);
 
   useEffect(() => {
-    // Focus the OK button automatically on mount for quick login with Enter key
     if (okButtonRef.current) {
       okButtonRef.current.focus();
     }
@@ -19,63 +20,68 @@ const LoginScreen = () => {
   };
 
   return (
-    <div className="login-screen">
+    <div className="login-screen wallpaper-clouds">
+      <div className="login-os-watermark">
+        <span className="watermark-name">{OS_NAME}</span>
+        <span className="watermark-ver">{OS_VERSION}</span>
+      </div>
+
       <div className="login-dialog os-panel">
         <div className="login-header">
-          <span className="login-title">Log On to Windows Portfolio</span>
-          <div className="login-header-icon">💻</div>
+          <span className="login-title">Welcome to {OS_NAME}</span>
+          <img src="/windows-flag.svg" alt="" className="login-header-flag" />
         </div>
         <div className="login-body-wrapper">
           <div className="login-sidebar">
             <div className="sidebar-brand-text">
-              <span>OS</span>
-              <span className="version-tag">98</span>
+              <span>Syed</span>
+              <span className="version-tag">{OS_VERSION}</span>
             </div>
           </div>
           <div className="login-main-form">
             <form onSubmit={handleLogin} className="logon-form">
               <div className="logon-instruction">
-                Type a user name and password to log on.
+                Type a user name and password to log on to {OS_NAME}.
               </div>
-              
+
               <div className="form-row">
                 <label htmlFor="username">User name:</label>
-                <input 
+                <input
                   id="username"
-                  type="text" 
-                  className="os-input os-panel-inset logon-input" 
-                  value="Guest" 
-                  disabled 
-                  readOnly 
+                  type="text"
+                  className="os-input os-panel-inset logon-input"
+                  value={USER_NAME}
+                  disabled
+                  readOnly
                 />
               </div>
 
               <div className="form-row">
                 <label htmlFor="password">Password:</label>
-                <input 
+                <input
                   id="password"
-                  type="password" 
-                  className="os-input os-panel-inset logon-input password-disabled" 
-                  value="" 
+                  type="password"
+                  className="os-input os-panel-inset logon-input password-disabled"
+                  value=""
                   placeholder="(None required)"
-                  disabled 
-                  readOnly 
+                  disabled
+                  readOnly
                 />
               </div>
 
               <div className="logon-tip">
-                * Click OK to log on. No password is required.
+                * Click OK to enter the desktop. No password required.
               </div>
 
               <div className="login-actions">
-                <button 
+                <button
                   type="submit"
                   ref={okButtonRef}
                   className="os-btn logon-btn default-btn"
                 >
                   OK
                 </button>
-                <button 
+                <button
                   type="button"
                   className="os-btn logon-btn"
                   onClick={() => setSystemState('boot')}
@@ -92,4 +98,3 @@ const LoginScreen = () => {
 };
 
 export default LoginScreen;
-

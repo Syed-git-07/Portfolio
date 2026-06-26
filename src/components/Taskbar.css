@@ -8,7 +8,12 @@
   align-items: center;
   padding: 2px;
   gap: 4px;
-  z-index: 10000; /* Ensure it's on top of everything */
+  z-index: 10000;
+}
+
+.start-area {
+  position: relative;
+  height: 100%;
 }
 
 .start-btn {
@@ -16,6 +21,13 @@
   font-weight: bold;
   display: flex;
   align-items: center;
+  gap: 4px;
+  padding: 2px 8px 2px 4px;
+}
+
+.start-icon {
+  width: 16px;
+  height: 16px;
 }
 
 .start-btn.active {
@@ -32,20 +44,34 @@
 .taskbar-windows {
   flex: 1;
   display: flex;
-  gap: 4px;
+  gap: 3px;
   height: 100%;
-  overflow-x: hidden;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.taskbar-windows::-webkit-scrollbar {
+  display: none;
 }
 
 .taskbar-window-btn {
   height: 100%;
-  flex: 1;
-  max-width: 150px;
+  flex: 0 1 auto;
+  min-width: 80px;
+  max-width: 160px;
   text-align: left;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  padding-left: 5px;
+  padding: 0 6px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.taskbar-win-icon {
+  font-size: 10px;
+  flex-shrink: 0;
 }
 
 .taskbar-window-btn.active {
@@ -64,36 +90,83 @@
   height: 100%;
   display: flex;
   align-items: center;
-  padding: 0 10px;
-  gap: 10px;
+  padding: 0 8px;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.tray-icon {
+  font-size: 11px;
+  cursor: default;
+}
+
+.tray-clock {
+  font-size: 11px;
+  min-width: 42px;
+  text-align: center;
 }
 
 /* Start Menu */
 .start-menu {
   position: absolute;
-  bottom: 30px; /* Above taskbar */
+  bottom: 30px;
   left: 0;
-  width: 200px;
+  width: 240px;
   display: flex;
   flex-direction: row;
   z-index: 10001;
+  box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
 }
 
 .start-menu-sidebar {
-  width: 30px;
-  background: linear-gradient(0deg, var(--os-title-active), #1084d0);
+  width: 28px;
+  background: linear-gradient(0deg, #000080 0%, #1084d0 60%, #000060 100%);
   color: white;
   display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  padding-bottom: 5px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  padding-bottom: 8px;
+  gap: 2px;
 }
 
 .start-menu-sidebar span {
   writing-mode: vertical-rl;
   transform: rotate(180deg);
   white-space: nowrap;
-  font-size: 16px;
+  font-size: 13px;
+  font-weight: bold;
+}
+
+.start-sidebar-sub {
+  font-size: 10px !important;
+  font-weight: normal !important;
+  opacity: 0.85;
+}
+
+.start-menu-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--os-window-bg);
+}
+
+.start-menu-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--os-shadow);
+  background: linear-gradient(180deg, #fff 0%, #e8e8e8 100%);
+}
+
+.start-user-icon {
+  font-size: 20px;
+}
+
+.start-user-name {
+  font-weight: bold;
+  font-size: 12px;
 }
 
 .start-menu-items {
@@ -101,15 +174,15 @@
   display: flex;
   flex-direction: column;
   padding: 2px;
-  background-color: var(--os-window-bg);
 }
 
 .start-menu-item {
-  padding: 8px 10px;
+  padding: 7px 10px;
   cursor: pointer;
   display: flex;
   align-items: center;
   gap: 10px;
+  font-size: 12px;
 }
 
 .start-menu-item:hover {
@@ -117,9 +190,18 @@
   color: white;
 }
 
-.start-menu-divider {
-  height: 2px;
+.start-menu-footer {
   border-top: 1px solid var(--os-shadow);
-  border-bottom: 1px solid var(--os-highlight);
-  margin: 2px 0;
+  padding: 2px;
+}
+
+.shutdown-item:hover {
+  background-color: #800000 !important;
+  color: white;
+}
+
+.item-icon {
+  font-size: 16px;
+  width: 20px;
+  text-align: center;
 }

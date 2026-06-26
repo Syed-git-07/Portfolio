@@ -1,24 +1,51 @@
 .login-screen {
   width: 100vw;
   height: 100vh;
-  background-color: var(--os-desktop-bg);
   display: flex;
   justify-content: center;
   align-items: center;
+  position: relative;
+}
+
+.login-os-watermark {
+  position: absolute;
+  bottom: 48px;
+  left: 24px;
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  pointer-events: none;
+}
+
+.watermark-name {
+  font-family: 'Trebuchet MS', 'Segoe UI', sans-serif;
+  font-size: 28px;
+  font-weight: 900;
+  color: rgba(255, 255, 255, 0.85);
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
+  letter-spacing: -0.5px;
+}
+
+.watermark-ver {
+  font-family: 'Trebuchet MS', sans-serif;
+  font-size: 18px;
+  font-weight: 900;
+  color: #ff0;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
 }
 
 .login-dialog {
-  width: 440px;
-  background-color: var(--os-window-bg);
+  width: 460px;
   display: flex;
   flex-direction: column;
-  box-shadow: 2px 2px 10px rgba(0,0,0,0.5);
+  box-shadow: 4px 4px 16px rgba(0, 0, 0, 0.45);
+  z-index: 1;
 }
 
 .login-header {
-  background: linear-gradient(90deg, var(--os-title-active), #1084d0);
+  background: linear-gradient(90deg, var(--os-title-active) 0%, #1084d0 60%, #000080 100%);
   color: var(--os-title-text);
-  padding: 4px 8px;
+  padding: 5px 10px;
   font-weight: bold;
   display: flex;
   justify-content: space-between;
@@ -28,28 +55,29 @@
 }
 
 .login-title {
-  letter-spacing: 0.5px;
+  letter-spacing: 0.3px;
 }
 
-.login-header-icon {
-  font-size: 14px;
+.login-header-flag {
+  width: 16px;
+  height: 16px;
 }
 
 .login-body-wrapper {
   display: flex;
-  padding: 12px;
-  gap: 15px;
+  padding: 14px;
+  gap: 16px;
   background-color: var(--os-window-bg);
 }
 
 .login-sidebar {
-  width: 65px;
-  min-height: 170px;
-  background: linear-gradient(180deg, #000080, #1084d0);
+  width: 70px;
+  min-height: 175px;
+  background: linear-gradient(180deg, #000080 0%, #1084d0 50%, #000060 100%);
   display: flex;
   justify-content: center;
   align-items: flex-end;
-  padding-bottom: 15px;
+  padding-bottom: 16px;
   border: 2px solid;
   border-color: var(--os-dark-shadow) var(--os-highlight) var(--os-highlight) var(--os-dark-shadow);
 }
@@ -59,9 +87,9 @@
   transform: rotate(180deg);
   color: var(--os-highlight);
   font-family: 'Trebuchet MS', 'Arial', sans-serif;
-  font-size: 24px;
+  font-size: 22px;
   font-weight: 900;
-  letter-spacing: 2px;
+  letter-spacing: 3px;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
   display: flex;
   flex-direction: row-reverse;
@@ -70,7 +98,7 @@
 }
 
 .version-tag {
-  font-size: 16px;
+  font-size: 15px;
   color: #ff0;
 }
 
@@ -151,7 +179,6 @@
 }
 
 .logon-btn.default-btn {
-  outline: 1px solid black;
-  outline-offset: -3px;
+  outline: 1px dotted black;
+  outline-offset: -4px;
 }
-
