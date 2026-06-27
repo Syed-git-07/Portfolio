@@ -12,7 +12,7 @@ const SkillsApp = () => {
   return (
     <div className="app-content">
       <h3 className="app-heading">🛠️ Technical & Soft Skills</h3>
-      <p className="app-subtext">Installed modules and system capabilities on Syed Sufyan OS.</p>
+      <p className="app-subtext">Installed modules and system capabilities on Syed OS Portfolio.</p>
 
       <div className="app-grid">
         {skillCategories.map((cat, idx) => (

@@ -1,35 +1,58 @@
 import React, { createContext, useState, useContext } from 'react';
+import { GUEST_NAME, USER_NAME } from '../constants/branding';
 
 const OsContext = createContext();
 
 export const useOs = () => useContext(OsContext);
 
-export const OsProvider = ({ children }) => {
-  // System State
-  const [systemState, setSystemState] = useState('boot'); // 'boot', 'login', 'desktop'
+const defaultGuestUser = {
+  name: GUEST_NAME,
+  isGuest: true,
+  avatar: null,
+};
 
-  // Windows State
-  // Example window object: { id: 'about', title: 'About', component: 'AboutApp', isOpen: true, isMinimized: false, zIndex: 1 }
+export const OsProvider = ({ children }) => {
+  const [systemState, setSystemState] = useState('boot');
+  const [currentUser, setCurrentUser] = useState(defaultGuestUser);
+
   const [windows, setWindows] = useState([]);
   const [activeWindowId, setActiveWindowId] = useState(null);
   const [highestZIndex, setHighestZIndex] = useState(1);
 
-  const openWindow = (appId, title, component) => {
+  const signInAsGuest = () => {
+    setCurrentUser(defaultGuestUser);
+  };
+
+  const signInAsOwner = () => {
+    setCurrentUser({
+      name: USER_NAME,
+      isGuest: false,
+      avatar: '/assets/profile.png',
+    });
+  };
+
+  const resetSession = () => {
+    setCurrentUser(defaultGuestUser);
+    setWindows([]);
+    setActiveWindowId(null);
+    setHighestZIndex(1);
+  };
+
+  const openWindow = (appId, title, component, props = {}) => {
     const existingWindow = windows.find(w => w.id === appId);
-    
+
     if (existingWindow) {
-      // If already open, focus it and ensure it's not minimized
-      setWindows(windows.map(w => 
-        w.id === appId ? { ...w, isMinimized: false, zIndex: highestZIndex + 1 } : w
+      setWindows(windows.map(w =>
+        w.id === appId ? { ...w, isMinimized: false, zIndex: highestZIndex + 1, props: { ...w.props, ...props } } : w
       ));
       setActiveWindowId(appId);
       setHighestZIndex(highestZIndex + 1);
     } else {
-      // Open new window
       const newWindow = {
         id: appId,
         title,
         component,
+        props,
         isOpen: true,
         isMinimized: false,
         zIndex: highestZIndex + 1,
@@ -48,7 +71,7 @@ export const OsProvider = ({ children }) => {
   };
 
   const minimizeWindow = (appId) => {
-    setWindows(windows.map(w => 
+    setWindows(windows.map(w =>
       w.id === appId ? { ...w, isMinimized: true } : w
     ));
     if (activeWindowId === appId) {
@@ -57,7 +80,7 @@ export const OsProvider = ({ children }) => {
   };
 
   const focusWindow = (appId) => {
-    setWindows(windows.map(w => 
+    setWindows(windows.map(w =>
       w.id === appId ? { ...w, zIndex: highestZIndex + 1, isMinimized: false } : w
     ));
     setActiveWindowId(appId);
@@ -67,12 +90,16 @@ export const OsProvider = ({ children }) => {
   const value = {
     systemState,
     setSystemState,
+    currentUser,
+    signInAsGuest,
+    signInAsOwner,
+    resetSession,
     windows,
     activeWindowId,
     openWindow,
     closeWindow,
     minimizeWindow,
-    focusWindow
+    focusWindow,
   };
 
   return (

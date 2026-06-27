@@ -1,3 +1,17 @@
+/* Windows 11 Bloom-inspired wallpaper */
+.wallpaper-win11 {
+  background-color: #1a1a2e;
+  background-image:
+    radial-gradient(ellipse 80% 60% at 20% 80%, rgba(0, 120, 212, 0.55) 0%, transparent 55%),
+    radial-gradient(ellipse 70% 50% at 75% 20%, rgba(136, 23, 152, 0.45) 0%, transparent 50%),
+    radial-gradient(ellipse 60% 45% at 50% 50%, rgba(0, 99, 177, 0.35) 0%, transparent 60%),
+    radial-gradient(ellipse 90% 70% at 85% 75%, rgba(232, 17, 35, 0.2) 0%, transparent 55%),
+    radial-gradient(ellipse 50% 40% at 10% 30%, rgba(16, 124, 16, 0.25) 0%, transparent 50%),
+    linear-gradient(135deg, #0f0c29 0%, #1a1a3e 35%, #24243e 65%, #0f3460 100%);
+  background-size: cover;
+}
+
+/* Legacy teal clouds — kept for fallback */
 .wallpaper-clouds {
   background-color: #008080;
   background-image:

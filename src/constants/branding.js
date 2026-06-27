@@ -1,5 +1,6 @@
-export const OS_NAME = 'Syed Sufyan OS';
-export const OS_VERSION = '98';
-export const OS_EDITION = 'Portfolio Edition';
-export const OS_FULL = `${OS_NAME} ${OS_VERSION}`;
+export const OS_NAME = 'Syed OS';
+export const OS_VERSION = '11';
+export const OS_EDITION = 'Portfolio';
+export const OS_FULL = `${OS_NAME} ${OS_EDITION}`;
 export const USER_NAME = 'Syed Sufyan M';
+export const GUEST_NAME = 'Guest';

@@ -6,6 +6,7 @@ import ContactApp from '../apps/ContactApp';
 import SkillsApp from '../apps/SkillsApp';
 import CertificationsApp from '../apps/CertificationsApp';
 import AchievementsApp from '../apps/AchievementsApp';
+import BrowserApp from '../apps/BrowserApp';
 import './Window.css';
 
 const APP_ICONS = {
@@ -15,10 +16,11 @@ const APP_ICONS = {
   CertificationsApp: '📜',
   AchievementsApp: '🏆',
   ContactApp: '📧',
+  BrowserApp: '🌐',
 };
 
 const Window = ({ app }) => {
-  const { id, title, component, isMinimized, zIndex } = app;
+  const { id, title, component, isMinimized, zIndex, props = {} } = app;
   const { closeWindow, minimizeWindow, focusWindow, activeWindowId } = useOs();
 
   const [position, setPosition] = useState({ x: 80 + zIndex * 12, y: 40 + zIndex * 12 });
@@ -73,6 +75,7 @@ const Window = ({ app }) => {
       case 'SkillsApp': return <SkillsApp />;
       case 'CertificationsApp': return <CertificationsApp />;
       case 'AchievementsApp': return <AchievementsApp />;
+      case 'BrowserApp': return <BrowserApp {...props} />;
       default: return <div className="app-content">App Content: {title}</div>;
     }
   };

@@ -1,6 +1,16 @@
 import React from 'react';
+import { useOs } from '../context/osContext';
 
 const ProjectsApp = () => {
+  const { openWindow } = useOs();
+
+  const handleOpenDemo = (proj) => {
+    if (proj.demoLink) {
+      const windowId = `browser-${proj.name.replace(/\s+/g, '-').toLowerCase()}`;
+      openWindow(windowId, `Browser - ${proj.name}`, 'BrowserApp', { url: proj.demoLink });
+    }
+  };
+
   const projects = [
     {
       name: 'Timetable Scheduler System',
@@ -8,6 +18,7 @@ const ProjectsApp = () => {
       desc: 'Developed a smart timetable scheduling application that automates the generation of class schedules while intelligently resolving conflicts among teachers, rooms, and subjects. The system uses constraint-based logic to ensure optimal resource allocation, preventing clashes and producing ready-to-use timetables efficiently.',
       tech: ['Spring Boot', 'Java', 'MySQL', 'HTML5', 'CSS3', 'JavaScript'],
       link: 'https://github.com/Syed-git-07/timetable_scheduler_system',
+      demoLink: 'https://timetableschedulersystem-production.up.railway.app/login',
     },
     {
       name: 'YouTube Clone',
@@ -15,6 +26,7 @@ const ProjectsApp = () => {
       desc: "Built a fully responsive video streaming web application inspired by YouTube's UI/UX. Features include a dynamic video grid, sidebar navigation, search functionality, dark mode support, and pixel-perfect layouts for both mobile and desktop viewports.",
       tech: ['HTML5', 'CSS3', 'JavaScript ES6+', 'Responsive Design', 'Flexbox & Grid'],
       link: 'https://github.com/Syed-git-07/Youtube_clone',
+      demoLink: 'https://youtube-clone-dun-xi.vercel.app/',
     },
   ];
 
@@ -39,10 +51,19 @@ const ProjectsApp = () => {
               ))}
             </div>
 
-            <div className="app-form-actions">
-              <a href={proj.link} target="_blank" rel="noopener noreferrer" className="os-btn" style={{ fontWeight: 'bold' }}>
-                💾 View Source Code
+            <div className="app-form-actions" style={{ display: 'flex', gap: '10px' }}>
+              <a href={proj.link} target="_blank" rel="noopener noreferrer" className="os-btn" style={{ fontWeight: 'bold', textDecoration: 'none', textAlign: 'center', flex: 1 }}>
+                💾 View Source
               </a>
+              {proj.demoLink && (
+                <button 
+                  onClick={() => handleOpenDemo(proj)} 
+                  className="os-btn" 
+                  style={{ fontWeight: 'bold', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '5px', flex: 1, border: 'none', fontFamily: 'inherit', cursor: 'pointer' }}
+                >
+                  🌐 View Demo
+                </button>
+              )}
             </div>
           </div>
         ))}
