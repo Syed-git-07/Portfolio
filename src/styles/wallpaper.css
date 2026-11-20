@@ -24,3 +24,36 @@
     radial-gradient(ellipse 190px 85px at 92% 68%, rgba(255, 255, 255, 0.8) 0%, transparent 70%),
     linear-gradient(180deg, #008080 0%, #007070 55%, #006060 100%);
 }
+
+/* Modern luxury dark gold theme */
+.wallpaper-dark-gold {
+  background-color: #0b0a07;
+  background-image:
+    radial-gradient(ellipse 70% 60% at 80% 20%, rgba(212, 175, 55, 0.18) 0%, transparent 60%),
+    radial-gradient(ellipse 65% 55% at 15% 85%, rgba(184, 134, 11, 0.12) 0%, transparent 55%),
+    linear-gradient(145deg, #0d0c08 0%, #17150f 40%, #201e16 80%, #0d0c08 100%);
+  background-size: cover;
+}
+
+/* Cyberpunk grid theme */
+.wallpaper-cyberpunk {
+  background-color: #050512;
+  background-image:
+    linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%),
+    radial-gradient(ellipse 80% 60% at 50% 40%, rgba(255, 0, 128, 0.15) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 50% at 20% 80%, rgba(0, 242, 254, 0.18) 0%, transparent 50%),
+    linear-gradient(135deg, #020010 0%, #08051a 50%, #150933 100%);
+  background-size: cover;
+  position: relative;
+}
+
+.wallpaper-cyberpunk::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+}

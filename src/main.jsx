@@ -1,14 +1,11 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import './index.css'
-import './styles/apps.css'
-import App from './App.jsx'
-import { OsProvider } from './context/osContext.jsx'
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
+import "@fontsource-variable/manrope";
+import "@fontsource-variable/dm-sans";
+import Portfolio from "./portfolio/Portfolio.jsx";
 
-createRoot(document.getElementById('root')).render(
+createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <OsProvider>
-      <App />
-    </OsProvider>
+    <Portfolio />
   </StrictMode>,
-)
+);

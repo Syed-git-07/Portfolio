@@ -1,0 +1,99 @@
+.github-activity {
+  position: relative;
+  height: 166svh;
+  background: #f0f2f1;
+  color: #17241e;
+}
+.activity-stage {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  display: grid;
+  place-items: center;
+  padding: 24px 6vw;
+}
+.activity-panel {
+  width: min(100%, 1080px);
+  background: #fcfdfb;
+  border-radius: 24px;
+  padding: clamp(20px, 4vw, 56px);
+  box-shadow: 0 14px 44px -35px #263f3247;
+}
+.activity-panel header,
+.activity-caption {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+.activity-panel #activity-heading {
+  font:
+    550 clamp(1.8rem, 4vw, 3.8rem)/1.05 "DM Sans Variable",
+    sans-serif;
+  letter-spacing: -0.065em;
+  margin: 0;
+}
+.activity-panel header a {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: inherit;
+  font-size: 0.88rem;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.activity-panel a:hover {
+  text-decoration: underline;
+}
+.activity-drawing {
+  position: relative;
+  margin-block: 12px;
+}
+.activity-drawing canvas {
+  display: block;
+  width: 100%;
+  height: clamp(170px, 31vw, 360px);
+  touch-action: pan-y;
+}
+.activity-drawing p {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  font-size: 0.9rem;
+}
+.activity-caption {
+  min-height: 1.5em;
+  color: #48584e;
+  font-size: 0.8rem;
+  font-variant-numeric: tabular-nums;
+}
+.github-activity[data-still] {
+  height: auto;
+}
+.github-activity[data-still] .activity-stage {
+  height: auto;
+  position: static;
+  padding-block: 9svh;
+}
+@media (max-width: 600px) {
+  .activity-stage {
+    padding: 16px 4vw;
+  }
+  .activity-panel {
+    border-radius: 18px;
+    padding: 20px 14px;
+  }
+  .activity-panel header a {
+    font-size: 0.76rem;
+  }
+  .activity-caption {
+    display: grid;
+    gap: 2px;
+    min-height: 3em;
+    font-size: 0.72rem;
+  }
+  .activity-panel #activity-heading {
+    font-size: 1.85rem;
+  }
+}

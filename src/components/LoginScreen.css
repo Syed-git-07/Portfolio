@@ -284,3 +284,231 @@
   0%, 100% { opacity: 0.15; }
   50% { opacity: 1; }
 }
+
+/* ── Password Entry screen ── */
+.login-password-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  animation: loginFadeIn 0.4s ease-out;
+  min-width: 300px;
+}
+
+.login-password-form {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.login-password-field {
+  position: relative;
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 4px;
+  overflow: hidden;
+  backdrop-filter: blur(10px);
+  width: 220px;
+  transition: border-color 0.2s;
+}
+
+.login-password-field:focus-within {
+  border-color: rgba(255, 255, 255, 0.85);
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.2);
+}
+
+.login-password-input {
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #fff;
+  font-family: inherit;
+  font-size: 14px;
+  padding: 8px 12px;
+  flex: 1;
+  width: 100%;
+}
+
+.login-password-input::placeholder {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.login-password-toggle {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: rgba(255, 255, 255, 0.7);
+  padding: 0 10px;
+  font-size: 14px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s;
+}
+
+.login-password-toggle:hover {
+  color: #fff;
+}
+
+.login-submit-btn {
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  color: #fff;
+  font-size: 16px;
+  width: 36px;
+  height: 36px;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+}
+
+.login-submit-btn:hover {
+  background: rgba(255, 255, 255, 0.35);
+}
+
+.login-error-msg {
+  color: #ff4d4d;
+  font-size: 12px;
+  margin: 0;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
+  font-weight: bold;
+}
+
+.login-hint-msg {
+  color: rgba(255, 255, 255, 0.65);
+  font-size: 11px;
+  margin: 0;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+}
+
+.login-back-btn {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 12px;
+  cursor: pointer;
+  margin-top: 8px;
+  text-decoration: underline;
+  transition: color 0.2s;
+}
+
+.login-back-btn:hover {
+  color: #fff;
+}
+
+/* Wiggle animation for incorrect credentials */
+.wiggle {
+  animation: wiggle 0.4s ease-in-out;
+}
+
+@keyframes wiggle {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-8px); }
+  40%, 80% { transform: translateX(8px); }
+}
+
+/* ── Public Guest Chat Widget ── */
+.login-chat-widget-container {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  z-index: 1000;
+  pointer-events: auto;
+}
+
+.login-chat-toggle-btn {
+  position: absolute;
+  bottom: 24px;
+  right: 24px;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: rgba(30, 30, 30, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #fff;
+  font-size: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 1001;
+}
+
+.login-chat-toggle-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.08);
+  box-shadow: 0 0 16px rgba(0, 120, 212, 0.4), 0 4px 20px rgba(0, 0, 0, 0.25);
+  border-color: rgba(255, 255, 255, 0.45);
+}
+
+.login-chat-toggle-btn.active {
+  background: #0078d4;
+  border-color: #0078d4;
+  box-shadow: 0 0 20px rgba(0, 120, 212, 0.6);
+  transform: rotate(90deg);
+}
+
+.login-chat-sidebar {
+  position: absolute;
+  bottom: 88px;
+  right: 24px;
+  width: 360px;
+  height: 520px;
+  max-height: calc(100vh - 130px);
+  background: rgba(20, 20, 20, 0.6);
+  backdrop-filter: blur(25px) saturate(140%);
+  -webkit-backdrop-filter: blur(25px) saturate(140%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.4);
+  overflow: hidden;
+  animation: chatCardSlideUp 0.3s cubic-bezier(0.1, 0.9, 0.2, 1);
+  z-index: 1000;
+}
+
+@keyframes chatCardSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Responsiveness for mobile screen */
+@media (max-width: 480px) {
+  .login-chat-sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 84px;
+    width: 100%;
+    height: auto;
+    max-height: none;
+    border-radius: 0;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+  }
+  .login-chat-toggle-btn {
+    bottom: 16px;
+    right: 16px;
+  }
+}
+

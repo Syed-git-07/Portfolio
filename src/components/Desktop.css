@@ -1,139 +1,248 @@
-.desktop {
-  width: 100vw;
-  height: 100vh;
-  position: relative;
-  display: flex;
-  flex-direction: column;
-}
-
-.desktop-watermark {
-  position: absolute;
-  bottom: 52px;
-  right: 16px;
-  pointer-events: none;
-  opacity: 0.4;
-}
-
-.desktop-watermark span {
-  font-family: 'Segoe UI', system-ui, sans-serif;
-  font-size: 13px;
-  font-weight: 500;
-  color: #fff;
-  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
-  letter-spacing: 0.3px;
-}
-
-.desktop-welcome {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  width: 260px;
-  padding: 16px 18px;
-  z-index: 0;
-  background: rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: 8px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-  animation: welcomeSlideIn 0.6s ease-out;
-}
-
-.welcome-greeting {
-  margin: 0 0 6px;
-  font-size: 14px;
-  font-weight: 500;
-  color: #fff;
-  font-family: 'Segoe UI', system-ui, sans-serif;
-}
-
-.welcome-greeting strong {
-  font-weight: 600;
-}
-
-.welcome-hint {
-  margin: 0;
-  font-size: 12px;
-  line-height: 1.45;
-  color: rgba(255, 255, 255, 0.75);
-  font-family: 'Segoe UI', system-ui, sans-serif;
-}
-
-.desktop-icons-grid {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  flex-wrap: wrap;
-  align-content: flex-start;
-  gap: 4px;
-  padding: 16px;
-  z-index: 1;
-}
-
-.desktop-icon {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  width: 76px;
-  padding: 8px 4px;
-  cursor: pointer;
-  gap: 6px;
-  border: 1px solid transparent;
-  border-radius: 6px;
-  transition: background 0.15s ease;
-}
-
-.desktop-icon:hover {
-  background-color: rgba(255, 255, 255, 0.08);
-  border-color: rgba(255, 255, 255, 0.12);
-}
-
-.desktop-icon.selected {
-  background-color: rgba(255, 255, 255, 0.15);
-  border-color: rgba(255, 255, 255, 0.25);
-}
-
-.desktop-icon.selected .icon-label {
-  background-color: rgba(0, 120, 212, 0.85);
-  color: #fff;
-  border-radius: 3px;
-}
-
-.icon-img-wrap {
-  width: 40px;
-  height: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.icon-img {
-  font-size: 32px;
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.35));
-  line-height: 1;
-}
-
-.icon-label {
-  font-size: 11px;
-  text-align: center;
-  word-break: break-word;
-  padding: 2px 6px;
-  line-height: 1.2;
-  color: #fff;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
-  max-width: 72px;
-  font-family: 'Segoe UI', system-ui, sans-serif;
-}
-
-@keyframes welcomeSlideIn {
-  from {
-    opacity: 0;
-    transform: translateX(16px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
+.desktop {
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.desktop-watermark {
+  position: absolute;
+  bottom: 52px;
+  right: 16px;
+  pointer-events: none;
+  opacity: 0.4;
+}
+
+.desktop-watermark span {
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  color: #fff;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
+  letter-spacing: 0.3px;
+}
+
+.desktop-welcome {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 260px;
+  padding: 16px 18px;
+  z-index: 0;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  animation: welcomeSlideIn 0.6s ease-out;
+}
+
+.welcome-greeting {
+  margin: 0 0 6px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #fff;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+}
+
+.welcome-greeting strong {
+  font-weight: 600;
+}
+
+.welcome-hint {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.45;
+  color: rgba(255, 255, 255, 0.75);
+  font-family: 'Segoe UI', system-ui, sans-serif;
+}
+
+.desktop-icons-grid {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  gap: 4px;
+  padding: 16px;
+  z-index: 1;
+}
+
+.desktop-icon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  width: 76px;
+  padding: 8px 4px;
+  cursor: pointer;
+  gap: 6px;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  transition: background 0.15s ease;
+}
+
+.desktop-icon:hover {
+  background-color: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+.desktop-icon.selected {
+  background-color: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+.desktop-icon.selected .icon-label {
+  background-color: rgba(0, 120, 212, 0.85);
+  color: #fff;
+  border-radius: 3px;
+}
+
+.icon-img-wrap {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon-img {
+  font-size: 32px;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.35));
+  line-height: 1;
+}
+
+.icon-label {
+  font-size: 11px;
+  text-align: center;
+  word-break: break-word;
+  padding: 2px 6px;
+  line-height: 1.2;
+  color: #fff;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+  max-width: 72px;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+}
+
+@keyframes welcomeSlideIn {
+  from {
+    opacity: 0;
+    transform: translateX(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* ── Guest Watermark ── */
+.desktop-guest-watermark {
+  position: absolute;
+  bottom: 52px;
+  right: 16px;
+  pointer-events: none;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  color: rgba(255, 255, 255, 0.35);
+  font-size: 11px;
+  text-align: right;
+  line-height: 1.4;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+  z-index: 0;
+}
+
+/* ── UAC Dialog Modal ── */
+.uac-modal {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 99999;
+  animation: uacFade 0.2s ease-out;
+}
+
+.uac-dialog {
+  width: 420px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+  animation: uacScale 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.uac-header {
+  background-color: #0078d4;
+  color: #fff;
+  padding: 6px 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: bold;
+  font-size: 12px;
+}
+
+.uac-shield {
+  font-size: 14px;
+}
+
+.uac-header-title {
+  font-family: 'Segoe UI', sans-serif;
+  letter-spacing: 0.3px;
+}
+
+.uac-body {
+  padding: 14px;
+  background-color: #f0f0f0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  color: #000;
+}
+
+.uac-prompt {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.uac-warning-icon {
+  font-size: 24px;
+  line-height: 1;
+  background: #ffb900;
+  padding: 4px;
+  border-radius: 4px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+.uac-prompt-details {
+  flex: 1;
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.uac-bold-text {
+  font-weight: bold;
+  margin: 0 0 6px 0;
+  font-size: 13px;
+}
+
+.uac-normal-text {
+  margin: 0 0 3px 0;
+  color: #333;
+}
+
+.uac-auth-form {
+  border-top: 1px solid #d0d0d0;
+  padding-top: 12px;
+}
+
+@keyframes uacFade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes uacScale {
+  from { transform: scale(0.92); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}

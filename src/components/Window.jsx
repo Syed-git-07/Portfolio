@@ -7,6 +7,9 @@ import SkillsApp from '../apps/SkillsApp';
 import CertificationsApp from '../apps/CertificationsApp';
 import AchievementsApp from '../apps/AchievementsApp';
 import BrowserApp from '../apps/BrowserApp';
+import TerminalApp from '../apps/TerminalApp';
+import AdminPanelApp from '../apps/AdminPanelApp';
+import GuestChatApp from '../apps/GuestChatApp';
 import './Window.css';
 
 const APP_ICONS = {
@@ -17,6 +20,9 @@ const APP_ICONS = {
   AchievementsApp: '🏆',
   ContactApp: '📧',
   BrowserApp: '🌐',
+  TerminalApp: '🐚',
+  AdminPanelApp: '⚙️',
+  GuestChatApp: '💬',
 };
 
 const Window = ({ app }) => {
@@ -76,6 +82,9 @@ const Window = ({ app }) => {
       case 'CertificationsApp': return <CertificationsApp />;
       case 'AchievementsApp': return <AchievementsApp />;
       case 'BrowserApp': return <BrowserApp {...props} />;
+      case 'TerminalApp': return <TerminalApp />;
+      case 'AdminPanelApp': return <AdminPanelApp />;
+      case 'GuestChatApp': return <GuestChatApp />;
       default: return <div className="app-content">App Content: {title}</div>;
     }
   };

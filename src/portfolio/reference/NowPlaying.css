@@ -1,0 +1,96 @@
+.project-island {
+  width: min(100%, 400px);
+  margin: 18px auto 0;
+  padding: 10px;
+  box-sizing: border-box;
+  overflow: hidden;
+  color: #fbfbfc;
+  background: #1e222a;
+  transform-origin: top center;
+}
+.project-island button,
+.project-island a {
+  font: inherit;
+  color: inherit;
+}
+.island-toggle {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 58px;
+  text-align: left;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+.island-toggle img,
+.island-preview img {
+  object-fit: cover;
+  object-position: top;
+  display: block;
+}
+.island-toggle span {
+  flex: 1;
+  min-width: 0;
+  display: grid;
+}
+.island-toggle small,
+.island-stack {
+  color: #c1cbd6;
+  font-size: 12px;
+}
+.island-toggle strong {
+  font-size: 15px;
+  line-height: 1.2;
+}
+.island-body {
+  padding: 8px 4px 0;
+}
+.island-preview {
+  width: 100%;
+  height: 95px;
+  padding: 0;
+  border: 0;
+  border-radius: 8px;
+  overflow: hidden;
+  cursor: pointer;
+}
+.island-preview img {
+  width: 100%;
+  height: 100%;
+}
+.island-stack {
+  margin: 7px 0;
+  line-height: 16px;
+}
+.island-links {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+.island-links button,
+.island-links a {
+  background: transparent;
+  border: 0;
+  padding: 4px 0;
+  cursor: pointer;
+  font-size: 13px;
+  text-decoration: underline;
+}
+.island-like {
+  margin-left: auto;
+}
+.island-like[aria-pressed="true"] {
+  color: #ff5364;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .island-like[aria-pressed="true"] svg {
+    animation: island-heart 0.32s ease-out;
+  }
+  @keyframes island-heart {
+    50% {
+      transform: scale(1.25);
+    }
+  }
+}
