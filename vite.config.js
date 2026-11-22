@@ -1,6 +1,7 @@
 import { defineConfig, loadEnv } from "vite";
 import activity, { fetchCalendar } from "./api/github-activity.js";
 import leetcode, { fetchLeetCodeCalendar } from "./api/leetcode-activity.js";
+import { localLikes } from "./server/local-likes.js";
 import react from "@vitejs/plugin-react";
 import { createGmailContactHandler } from "./api/contact.js";
 
@@ -8,6 +9,21 @@ import { createGmailContactHandler } from "./api/contact.js";
 export default defineConfig(({ mode }) => ({
   plugins: [
     react(),
+    {
+      name: "shared-project-likes",
+      configureServer(server) {
+        server.middlewares.use(
+          "/api/project-likes",
+          localLikes(loadEnv(mode, process.cwd(), "")),
+        );
+      },
+      configurePreviewServer(server) {
+        server.middlewares.use(
+          "/api/project-likes",
+          localLikes(loadEnv(mode, process.cwd(), "")),
+        );
+      },
+    },
     {
       name: "github-activity",
       configureServer(server) {

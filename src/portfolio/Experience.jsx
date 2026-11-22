@@ -1147,13 +1147,6 @@ export default function Experience({ content }) {
         <ProjectStory
           paused={stopMotion}
           project={selected}
-          projects={content.projects}
-          onSelect={(p) => {
-            setSelected(p);
-            const hash = "#project/" + p.id;
-            history.replaceState(history.state, "", hash);
-            setRoute(hash);
-          }}
           onClose={closeProject}
         />
       )}

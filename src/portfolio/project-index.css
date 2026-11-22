@@ -983,3 +983,84 @@
     transition:object-position 450ms ease, scale 520ms cubic-bezier(.2,.65,.25,1);
   }
 }
+/* The button itself is the visible face. Its measured border box, pointer
+   target and rounded edge all follow the same carousel spring. */
+.folio-row, .work-sheet {
+  --sheet-height: clamp(250px, 53svh, 480px);
+}
+.folio-row:has(> .work-sheet) { height: var(--sheet-height); }
+.folio-trigger.work-sheet {
+  position: absolute;
+  inset: 0 0 var(--cut, 0px);
+  display: block;
+  height: auto;
+  overflow: clip;
+  pointer-events: auto;
+  padding: 0;
+  border: 4px solid white;
+  border-radius: var(--radius, 20px);
+  background: var(--project-cobalt);
+  color: white;
+  text-align: center;
+  font-family: "DM Sans Variable", sans-serif;
+}
+.folio-trigger.work-sheet:focus-visible { outline: 3px solid #ffca68; outline-offset: -6px; }
+.work-sheet-body {
+  position: absolute;
+  inset: 0 0 auto;
+  box-sizing: border-box;
+  height: calc(var(--sheet-height) - 8px);
+  padding: clamp(12px, 2.1vh, 23px) 5% 0;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: clamp(8px, 1.4vh, 16px);
+  overflow: hidden;
+}
+.work-sheet-head { width: 100%; line-height: 1; }
+.work-sheet-name {
+  color: white;
+  font: 400 clamp(26px, 3.45vw, 58px)/.98 var(--project-serif);
+  letter-spacing: -.025em;
+  overflow-wrap: anywhere;
+  text-wrap: balance;
+}
+.work-sheet-summary {
+  max-width: min(100%, 46ch);
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  color: var(--project-copy);
+  font-size: clamp(13px, 1.1vw, 16px);
+  line-height: 1.4;
+}
+.work-sheet-preview {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  width: min(88%, 620px);
+  margin-top: auto;
+  overflow: hidden;
+  border: 1px solid #eef3fa;
+  border-bottom: 0;
+  border-radius: 12px 12px 0 0;
+  background: white;
+}
+.work-sheet-preview .cin-bar { height: 16px; flex: none; }
+.work-sheet-preview .cin-bar i { width: 5px; height: 5px; }
+.work-sheet-preview img, .work-sheet:hover img {
+  display: block;
+  width: 100%;
+  flex: 1;
+  min-height: 0;
+  object-fit: cover;
+  object-position: top center;
+  transform: none;
+}
+.work-sheet-preview:is([data-project="sso"], [data-project="achuppori"]) img { object-fit: contain; }
+@media (max-width: 760px) {
+  .folio-row, .work-sheet { --sheet-height: clamp(235px, 43svh, 370px); }
+  .work-sheet-name { font-size: clamp(24px, 7.5vw, 38px); }
+}
