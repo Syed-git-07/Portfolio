@@ -17,7 +17,7 @@ const TerminalApp = () => {
 
   const [history, setHistory] = useState([
     `${OS_FULL} [Version ${OS_VERSION}.0.2026]`,
-    `(c) Syed Sufyan M. All rights reserved.`,
+    `(c) Syed Sufyan. All rights reserved.`,
     ``,
     `Type 'help' to see the list of available commands.`,
     ``,

@@ -6,7 +6,7 @@ const AboutApp = () => {
       <div className="app-profile-row">
         <img
           src="/assets/profile.png"
-          alt="Syed Sufyan M"
+          alt="Syed Sufyan"
           className="app-profile-photo"
           onError={(e) => {
             e.target.onerror = null;
@@ -17,7 +17,7 @@ const AboutApp = () => {
         <div className="app-profile-fallback">SS</div>
 
         <div>
-          <h2 className="app-profile-name">Syed Sufyan M</h2>
+          <h2 className="app-profile-name">Syed Sufyan</h2>
           <p className="app-profile-role"><strong>Aspiring Software Developer & CSE Student</strong></p>
           <p className="app-profile-detail"><strong>National Engineering College, Kovilpatti</strong></p>
           <p className="app-profile-detail" style={{ marginBottom: 14 }}><strong>CGPA:</strong> 8.5 (Upto 3rd Semester)</p>

@@ -1,6 +1,6 @@
 export const initialContent = {
   profile: {
-    name: "Syed Sufyan M",
+    name: "Syed Sufyan",
     role: "Software developer · CSE undergraduate",
     headline: "Ideas into\nthings that\nmove.",
     intro:
@@ -331,5 +331,7 @@ export function validateContent(data) {
       seen.add(item.id);
     }
   }
+  if (/^Syed\s+Sufyan\s+M\.?$/i.test(data.profile.name.trim()))
+    return { ...data, profile: { ...data.profile, name: initialContent.profile.name } };
   return data;
 }

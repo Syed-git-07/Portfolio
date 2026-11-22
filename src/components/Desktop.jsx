@@ -173,7 +173,7 @@ const Desktop = () => {
                 <div className="uac-prompt-details">
                   <p className="uac-bold-text">Do you want to allow this application to make changes to your device?</p>
                   <p className="uac-normal-text">Program name: <strong>{uacApp.title}</strong></p>
-                  <p className="uac-normal-text">Verified publisher: <strong>Syed Sufyan M</strong></p>
+                  <p className="uac-normal-text">Verified publisher: <strong>Syed Sufyan</strong></p>
                   <p className="uac-normal-text">Security Status: <span style={{ color: '#0078d4', fontWeight: 'bold' }}>Elevated Authorization Required</span></p>
                 </div>
               </div>
