@@ -1,3 +1,4 @@
+import { FillControl } from "./HomeInteractions";
 import ValidationThreads from "./ValidationThreads";
 import { SignaturePad } from "./reference/SignaturePad";
 import { useLayoutEffect, useRef, useState } from "react";
@@ -173,14 +174,16 @@ export default function Contact({ profile }) {
         </span>
       </div>
       <div className="note-row">
-        <small>FROM</small>
+        <small>Name</small>
         <span className="ink-line">{fieldValue("name")}</span>
       </div>
       <div className="note-row">
-        <small>REPLY TO</small>
+        <small>From</small>
         <span className="ink-line">{fieldValue("email")}</span>
       </div>
-      <div className="ink-line letter-message">{fieldValue("message")}</div>
+      <div className="ink-line letter-message">
+        <small>Message</small>{fieldValue("message")}
+      </div>
     </>
   );
   const letterContent = renderNote(ink);
@@ -285,9 +288,9 @@ export default function Contact({ profile }) {
               <small className="message-count">
                 {values.message.length} / 5000
               </small>
-              <button disabled={locked} className="contact-send">
+              <FillControl disabled={locked}>
                 {finished ? "Done" : locked ? "Sending…" : "Send message"}
-              </button>
+              </FillControl>
             </div>
             <ValidationThreads />
           </form>

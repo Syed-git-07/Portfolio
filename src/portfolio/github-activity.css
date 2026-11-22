@@ -1,34 +1,43 @@
 .github-activity {
   position: relative;
-  height: 166svh;
+  --stage-height: max(100svh, 325px);
+  height: calc(var(--stage-height) + 66svh);
   background: #f0f2f1;
   color: #17241e;
 }
 .activity-stage {
   position: sticky;
-  top: 0;
-  height: 100svh;
+  top: min(0px, calc(100svh - var(--stage-height)));
+  height: var(--stage-height);
   display: grid;
   place-items: center;
-  padding: 24px 6vw;
+  padding: 20px clamp(16px, 4vw, 76px);
+}
+.activity-pair {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  width: min(100%, 1620px);
+  gap: clamp(12px, 1.6vw, 28px);
 }
 .activity-panel {
-  width: min(100%, 1080px);
+  min-width: 0;
   background: #fcfdfb;
+  color: #17241e;
   border-radius: 24px;
-  padding: clamp(20px, 4vw, 56px);
+  padding: clamp(18px, 2.2vw, 38px);
   box-shadow: 0 14px 44px -35px #263f3247;
 }
-.activity-panel header,
-.activity-caption {
+.activity-panel header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 16px;
+  flex-wrap: wrap;
+  column-gap: 12px;
+  row-gap: 5px;
 }
-.activity-panel #activity-heading {
+.github-activity .activity-panel h2 {
   font:
-    550 clamp(1.8rem, 4vw, 3.8rem)/1.05 "DM Sans Variable",
+    550 clamp(1.65rem, 2.7vw, 3.25rem)/1.05 "DM Sans Variable",
     sans-serif;
   letter-spacing: -0.065em;
   margin: 0;
@@ -38,7 +47,7 @@
   align-items: center;
   gap: 4px;
   color: inherit;
-  font-size: 0.88rem;
+  font-size: clamp(0.72rem, 1vw, 0.88rem);
   text-decoration: none;
   white-space: nowrap;
 }
@@ -47,12 +56,12 @@
 }
 .activity-drawing {
   position: relative;
-  margin-block: 12px;
+  margin-block: 8px;
 }
 .activity-drawing canvas {
   display: block;
   width: 100%;
-  height: clamp(170px, 31vw, 360px);
+  height: clamp(154px, 17vw, 290px);
   touch-action: pan-y;
 }
 .activity-drawing p {
@@ -62,11 +71,21 @@
   place-content: center;
   font-size: 0.9rem;
 }
-.activity-caption {
-  min-height: 1.5em;
+.activity-caption,
+.activity-metrics {
   color: #48584e;
   font-size: 0.8rem;
+  line-height: 1.4;
   font-variant-numeric: tabular-nums;
+}
+.activity-metrics {
+  margin-top: 8px;
+  min-height: 1.4em;
+}
+.activity-caption {
+  display: grid;
+  gap: 2px;
+  min-height: calc(2.8em + 2px);
 }
 .github-activity[data-still] {
   height: auto;
@@ -76,24 +95,29 @@
   position: static;
   padding-block: 9svh;
 }
-@media (max-width: 600px) {
+@media (max-width: 760px) {
+  .github-activity {
+    --stage-height: max(100svh, 533px);
+  }
   .activity-stage {
-    padding: 16px 4vw;
+    padding: 14px 4vw;
+  }
+  .activity-pair {
+    grid-template-columns: minmax(0, 1fr);
+    max-width: 610px;
+    gap: 12px;
   }
   .activity-panel {
     border-radius: 18px;
-    padding: 20px 14px;
+    padding: 16px;
   }
-  .activity-panel header a {
-    font-size: 0.76rem;
+  .github-activity .activity-panel h2 {
+    font-size: clamp(1.6rem, 5.6vw, 2rem);
+  }
+  .activity-drawing canvas {
+    height: clamp(99px, min(30vw, 18svh), 155px);
   }
   .activity-caption {
-    display: grid;
-    gap: 2px;
-    min-height: 3em;
     font-size: 0.72rem;
-  }
-  .activity-panel #activity-heading {
-    font-size: 1.85rem;
   }
 }

@@ -304,8 +304,9 @@ export function AsciiWake({
       s.near += ((s.inside ? 1 : 0) - s.near) * (1 - Math.pow(0.004, dt));
       s.tick += dt;
       if (s.tick > 0.07) { s.tick = 0; s.deal++; }
-      paint();
       const still = warm === 0 && !s.rings.length && Math.abs((s.inside ? 1 : 0) - s.near) < 0.004;
+      if (still) s.near = s.inside ? 1 : 0;
+      paint();
       s.raf = still ? 0 : requestAnimationFrame(step);
     };
     s.raf = requestAnimationFrame(step);
@@ -350,14 +351,21 @@ export function AsciiWake({
     s.inside = true;
     run();
   };
+  const leave = () => {
+    const s = st.current;
+    s.inside = false;
+    s.lx = NaN;
+    run();
+  };
 
   return (
     <div
       className="asc"
-      style={{ width: W, height: H }}
+      style={{ maxWidth: W, aspectRatio: `${W} / ${H}` }}
       onPointerEnter={(e) => { const s = st.current; s.lx = NaN; move(e); }}
       onPointerMove={move}
-      onPointerLeave={() => { const s = st.current; s.inside = false; s.lx = NaN; run(); }}
+      onPointerLeave={leave}
+      onPointerCancel={leave}
       onPointerDown={(e) => {
         const { x, y } = where(e);
         st.current.rings.push({ x, y, t: 0 });
@@ -366,7 +374,7 @@ export function AsciiWake({
       role="img"
       aria-label="A cube of dots that a pointer drags a wake through"
     >
-      <canvas ref={cv} className="asc-canvas" style={{ width: W, height: H }} aria-hidden="true" />
+      <canvas ref={cv} className="asc-canvas" width={W} height={H} aria-hidden="true" />
     </div>
   );
 }

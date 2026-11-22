@@ -1,5 +1,6 @@
 import { defineConfig, loadEnv } from "vite";
 import activity, { fetchCalendar } from "./api/github-activity.js";
+import leetcode, { fetchLeetCodeCalendar } from "./api/leetcode-activity.js";
 import react from "@vitejs/plugin-react";
 import { createGmailContactHandler } from "./api/contact.js";
 
@@ -28,6 +29,29 @@ export default defineConfig(({ mode }) => ({
         } catch {
           this.warn(
             "GitHub unavailable. Keeping the dated public calendar snapshot.",
+          );
+        }
+      },
+    },
+    {
+      name: "leetcode-activity",
+      configureServer(server) {
+        server.middlewares.use("/api/leetcode-activity", leetcode);
+      },
+      configurePreviewServer(server) {
+        server.middlewares.use("/api/leetcode-activity", leetcode);
+      },
+      async generateBundle() {
+        try {
+          const calendar = await fetchLeetCodeCalendar();
+          this.emitFile({
+            type: "asset",
+            fileName: "leetcode-activity.json",
+            source: JSON.stringify(calendar),
+          });
+        } catch {
+          this.warn(
+            "LeetCode unavailable. Keeping the dated public calendar snapshot.",
           );
         }
       },

@@ -1,4 +1,4 @@
-﻿.folio-index {
+.folio-index {
   background: #eeefeb;
   color: #16211e;
   display: grid;
@@ -117,25 +117,6 @@
 .folio-links:empty {
   display: none;
 }
-.folio-pointer {
-  display: grid;
-  place-items: center;
-  position: fixed;
-  z-index: 80;
-  transform: translate(-50%, -50%);
-  pointer-events: none;
-  background: #56646cbf;
-  color: white;
-  border-radius: 24px;
-  backdrop-filter: blur(10px);
-  overflow: hidden;
-}
-.folio-pointer span {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  font-size: 14px;
-}
 .folio-screen {
   height: min(37vh, 320px);
   background: #e7ecef;
@@ -150,11 +131,6 @@
 .folio-index :focus-visible {
   outline: 2px solid #398ecc;
   outline-offset: 3px;
-}
-@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
-  .folio-trigger:hover {
-    cursor: none;
-  }
 }
 @media (max-width: 760px) {
   .folio-index {
@@ -189,9 +165,6 @@
 @media (prefers-reduced-motion: reduce) {
   .folio-thumb img {
     transition: none;
-  }
-  .folio-pointer {
-    display: none;
   }
 }
 .folio-summary {
@@ -338,12 +311,6 @@
 }
 .folio-index[data-paused] .folio-trigger {
   cursor: pointer;
-}
-.folio-pointer {
-  background: #525b638c;
-  backdrop-filter: blur(12px);
-  white-space: nowrap;
-  transform: none;
 }
 @media (max-width: 760px) {
   .folio-index {
@@ -922,4 +889,97 @@
   pointer-events: none;
   background: #15212b;
   opacity: calc((1 - var(--expansion, 1)) * 0.46);
+}
+
+/* Expanded story: the same screenshot continues behind the project introduction. */
+.project-dialog-panel {
+  --story-base: #17251f;
+  --story-inset: clamp(20px, 3.2vw, 38px);
+  width: min(760px, 100%);
+  background: var(--story-base);
+  color: #f8faf5;
+}
+.project-dialog-hero {
+  height: clamp(350px, 48dvh, 510px);
+  background: var(--story-base);
+}
+.project-dialog-hero > .folio-photo::after {
+  background: linear-gradient(180deg, transparent 12%, rgb(13 23 19 / .07) 29%, rgb(15 26 22 / .74) 57%, #17251f 100%);
+}
+.project-dialog-heading {
+  left: var(--story-inset);
+  right: var(--story-inset);
+  bottom: 12px;
+}
+.project-dialog-heading > small {color: #e1eae4; margin-bottom: 6px;}
+.project-dialog-heading h2 {font-size: clamp(30px, 4vw, 54px);}
+.project-dialog-intro p {
+  margin: 9px 0 16px;
+  max-width: 57ch;
+  font-size: clamp(.91rem, 1.35vw, 1.03rem);
+  line-height: 1.46;
+  color: #eff3ee;
+}
+.project-dialog-intro .folio-links {gap: 9px; flex-wrap: wrap;}
+.project-dialog-intro .folio-links a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-height: 42px;
+  padding: 0 14px;
+  border-radius: 8px;
+  background: #edf4e6;
+  color: #182a1f;
+  font-size: .83rem;
+  font-weight: 600;
+  text-shadow: none;
+  text-decoration: none;
+}
+.project-dialog-intro .folio-links a + a {background: #304039;color:#f2f7f1;}
+.project-dialog-copy {padding: 16px var(--story-inset) 18px;}
+.project-dialog-copy h3 {font-size: clamp(1.08rem, 2vw, 1.37rem);letter-spacing:-.028em;margin: 0 0 6px;}
+.project-dialog-copy p {color: #c5d1c9;line-height: 1.55;font-size:.9rem;margin:0;}
+.project-dialog-copy ul {margin:12px 0 16px;gap:5px 7px;color:#dce8df;}
+.project-dialog-copy li {background:#283931;font-size:.72rem;padding:3px 8px;}
+.project-dialog-copy figure {margin: 16px 0 6px;}
+.project-dialog-copy figcaption {gap:6px 14px;}
+.project-dialog-copy figcaption button {
+  display:inline-flex;align-items:center;gap:7px;padding:5px 0;
+  color:#dce7de;min-height:40px;font-size:.77rem;
+}
+.project-dialog-copy figcaption button img {
+  width:32px;height:26px;object-fit:cover;object-position:top;border-radius:4px;
+}
+.project-dialog-copy figcaption button[aria-expanded=true] {color:white;border-bottom-color:#c1d7b5;}
+.project-dialog-copy footer {border-color:#3a4a40;justify-content:flex-end;padding:4px 0 0;}
+.project-dialog-copy footer button {min-height:40px;color:#e3eee6;}
+.project-dialog-panel :focus-visible {outline-color:#90bdff;}
+.project-dialog-hero:has(.flight-word) .project-dialog-intro {visibility:hidden;}
+@media (hover:hover) and (pointer:fine) and (prefers-reduced-motion:no-preference) {
+  .project-dialog-panel {transition:box-shadow 300ms ease;}
+  .project-dialog-panel:hover {box-shadow:0 30px 84px -38px #12201ca8;}
+  .project-dialog-hero > .folio-photo > img {transition:scale 520ms cubic-bezier(.2,.65,.25,1);}
+  .project-dialog-hero > .folio-photo::after {transition:opacity 430ms ease;opacity:.97;}
+  .project-dialog-intro {transition:translate 450ms cubic-bezier(.2,.65,.25,1);}
+  .project-dialog-intro .folio-links {opacity:.83;translate:0 3px;transition:opacity 350ms ease,translate 400ms ease;}
+  .project-dialog-panel:is(:hover,:has(.project-dialog-intro :focus-visible)) .project-dialog-hero:not(:has(.flight-word)) > .folio-photo img {scale:1.045;}
+  .project-dialog-panel:hover .folio-photo::after {opacity:1;}
+  .project-dialog-panel:is(:hover,:has(.project-dialog-intro :focus-visible)) .project-dialog-intro {translate:0 -5px;}
+  .project-dialog-panel:is(:hover,:has(.project-dialog-intro :focus-visible)) .project-dialog-intro .folio-links {opacity:1;translate:0 0;}
+}
+@media(max-width:600px) {
+  .project-dialog-hero {height:clamp(350px,48svh,440px);}
+  .project-dialog-heading {bottom:8px;}
+  .project-dialog-intro .folio-links a,.project-dialog-copy figcaption button,.project-dialog-copy footer button {min-height:44px;}
+}
+/* Keep the checkout control in the clear upper portion of this screenshot. */
+.project-dialog-hero .folio-photo[data-image="achuppori"] {background:#ecf2fb;}
+.project-dialog-hero:not(:has(.flight-word)) .folio-photo[data-image="achuppori"] img {
+  object-position:50% calc(50% - clamp(48px, 9svh, 84px));
+}
+@media(prefers-reduced-motion:no-preference) {
+  .project-dialog-hero .folio-photo[data-image="achuppori"] img {
+    transition:object-position 450ms ease, scale 520ms cubic-bezier(.2,.65,.25,1);
+  }
 }

@@ -1,11 +1,10 @@
-import { Ball } from "./reference/Ball";
-import { useEffect, useMemo, useState } from "react";
+import { usePortfolioScroll } from "./usePortfolioScroll";
+import { lazy, Suspense, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { flushSync } from "react-dom";
 import {
   AnimatePresence,
   motion,
   useReducedMotion,
-  useScroll,
-  useSpring,
 } from "motion/react";
 import {
   ArrowUpRight,
@@ -15,15 +14,18 @@ import {
   Download,
   Layers,
 } from "lucide-react";
-import InfiniteSpiral from "./reference/InfiniteSpiral";
 import Modal from "./Modal";
 import GitHubActivity from "./GitHubActivity";
 import Contact from "./Contact";
 import { ProjectDeck, ProjectStory } from "./WorkShowcase";
 import "./showcase.css";
-import HomePage, { HomeNavigation } from "./HomePage";
+import { HomeNavigation } from "./HomePage";
 import { safeUrl } from "./content";
 import "./experience.css";
+import { EditorialContent, EditorialFooter, EditorialHeader, EditorialPointer } from "./EditorialHome";
+const Ball = lazy(() => import("./reference/Ball").then(module => ({ default: module.Ball })));
+const InfiniteSpiral = lazy(() => import("./reference/InfiniteSpiral"));
+
 const ext = { target: "_blank", rel: "noopener noreferrer" };
 const colours = ["#a8baff", "#bdc6d5", "#aea0f5", "#98c7d2"];
 
@@ -109,7 +111,7 @@ function SkillMeter({ skills }) {
           <br />
           Here’s what I work with.
         </p>
-        <Ball />
+        <Suspense fallback={null}><Ball /></Suspense>
         <div className="tool-tags">
           {(current
             ? words(current.items)
@@ -321,7 +323,7 @@ function Journey({ education, profile }) {
           <br />
           <em>Still becoming.</em>
         </h2>
-        <Ball />
+        <Suspense fallback={null}><Ball /></Suspense>
       </div>
       <div className="journey-grid">
         <button
@@ -430,6 +432,7 @@ function Archive({ content, paused }) {
       );
       if (c) setView(c);
     };
+    handle();
     window.addEventListener("hashchange", handle);
     return () => window.removeEventListener("hashchange", handle);
   }, [content.certificates]);
@@ -448,7 +451,8 @@ function Archive({ content, paused }) {
           }
         }}
       >
-        <InfiniteSpiral
+        <Suspense fallback={null}>
+          <InfiniteSpiral
           items={items}
           animationMode={paused ? "drag" : "all"}
           speed={0.35}
@@ -461,7 +465,8 @@ function Archive({ content, paused }) {
           edgeBlur={0}
           imageFit="contain"
           cardRadius={5}
-        />
+          />
+        </Suspense>
       </div>
       <div className="archive-content">
         <span className="micro-label">05 — THE ARCHIVE</span>
@@ -576,12 +581,12 @@ function SearchMenu({ content, onClose, onOpen }) {
         </label>
         <div>
           {[
-            ["work", "Selected work"],
+            ["work", "Selected projects"],
             ["toolkit", "Toolkit"],
-            ["credentials", "Certificates"],
-            ["journey", "My journey"],
+            ["credentials", "Certifications"],
+            ["journey", "Education"],
             ["archive", "Archive"],
-            ["contact", "Write to me"],
+            ["contact", "Contact"],
           ]
             .filter(([, n]) => n.toLowerCase().includes(query.toLowerCase()))
             .map(([id, n], i) => (
@@ -618,12 +623,12 @@ function SearchMenu({ content, onClose, onOpen }) {
             ))}
           {query &&
             ![
-              "Selected work",
+              "Selected projects",
               "Toolkit",
-              "Certificates",
-              "My journey",
+              "Certifications",
+              "Education",
               "Archive",
-              "Write to me",
+              "Contact",
               ...content.projects.map((p) => p.title),
             ].some((n) => n.toLowerCase().includes(query.toLowerCase())) && (
               <p role="status">No matches.</p>
@@ -634,87 +639,412 @@ function SearchMenu({ content, onClose, onOpen }) {
   );
 }
 
+const extraSections = new Set([
+  "#notes",
+  "#featured",
+  "#work",
+  "#github-activity",
+  "#toolkit",
+  "#credentials",
+  "#journey",
+  "#archive",
+  "#contact",
+]);
+function pageHandoff(transitionRef, from, to, change) {
+  const isDetail = (hash) => /^#(?:project|certificate)\//.test(hash);
+  if (
+    (from || "#home") === (to || "#home") ||
+    to === "#main" ||
+    isDetail(from) ||
+    isDetail(to) ||
+    matchMedia("(prefers-reduced-motion: reduce)").matches
+  ) {
+    change();
+    return;
+  }
+  const root = document.documentElement;
+  root.classList.add("ed-transfer");
+  let transition;
+  if (document.startViewTransition) {
+    transition = document.startViewTransition(change);
+    transition.ready.catch(() => {});
+  } else if (Element.prototype.animate) {
+    // On browsers without snapshots, cover the change with the same angled edge.
+    const curtain = document.createElement("div");
+    curtain.className = "ed-route-curtain";
+    curtain.setAttribute("aria-hidden", "true");
+    document.body.append(curtain);
+    const covered = "polygon(0 0,100% 0,100% 100%,0 100%)";
+    const below = "polygon(0 100%,100% 130%,100% 130%,0 100%)";
+    const above = "polygon(0 -30%,100% 0,100% 0,0 -30%)";
+    const options = {
+      duration: 360,
+      easing: "cubic-bezier(.55,.04,.2,1)",
+      fill: "both",
+    };
+    let animation = curtain.animate(
+      [{ clipPath: below }, { clipPath: covered }],
+      options,
+    );
+    let skipped = false;
+    transition = {
+      skipTransition() {
+        skipped = true;
+        animation.cancel();
+      },
+      finished: (async () => {
+        try {
+          await animation.finished.catch(() => {});
+          change();
+          if (skipped) return;
+          animation = curtain.animate(
+            [{ clipPath: covered }, { clipPath: above }],
+            options,
+          );
+          await animation.finished.catch(() => {});
+        } finally {
+          curtain.remove();
+        }
+      })(),
+    };
+  } else {
+    root.classList.remove("ed-transfer");
+    change();
+    return;
+  }
+  transitionRef.current = transition;
+  const cleanup = () => {
+    if (transitionRef.current !== transition) return;
+    root.classList.remove("ed-transfer");
+    transitionRef.current = null;
+  };
+  transition.finished.then(cleanup, cleanup);
+}
+
 export default function Experience({ content }) {
-  const [stopMotion, setStopMotion] = useState(() => matchMedia("(prefers-reduced-motion: reduce)").matches);
+  const [stopMotion, setStopMotion] = useState(
+    () => matchMedia("(prefers-reduced-motion: reduce)").matches,
+  );
+  const [opening, setOpening] = useState(
+    () =>
+      document.documentElement.hasAttribute("data-home-opening") &&
+      (!location.hash || location.hash === "#home"),
+  );
+  const finish = useCallback(() => setOpening(false), []);
+  const [route, setRoute] = useState(location.hash);
+  usePortfolioScroll(opening, stopMotion, route);
+  const [base, setBase] = useState(() =>
+    location.hash.startsWith("#project/")
+      ? history.state?.homeBase || ""
+      : location.hash,
+  );
+  const [search, setSearch] = useState(false);
+  const [selected, setSelected] = useState(() =>
+    content.projects.find((p) => location.hash === "#project/" + p.id),
+  );
+  const currentTransition = useRef(null),
+    origins = useRef(new Map()),
+    scrollPositions = useRef(new Map());
+  const nextOrigin = useRef(0),
+    generation = useRef(0),
+    records = useRef(content.projects);
+  records.current = content.projects;
+  const page = content.pages.find((p) => base === "#/pages/" + p.id);
+  const lastRoute = useRef(route);
+  lastRoute.current = route;
+  const arrivals = useRef(new Set());
+  const profile = content.profile;
+  const projectAt = (hash) =>
+    content.projects.find((p) => hash === "#project/" + p.id);
   useEffect(() => {
     const media = matchMedia("(prefers-reduced-motion: reduce)");
-    const sync = () => setStopMotion(media.matches);
+    const sync = () => {
+      setStopMotion(media.matches);
+      if (media.matches) {
+        finish();
+        currentTransition.current?.skipTransition();
+        cancelArrivals();
+      }
+    };
     media.addEventListener("change", sync);
-    sync();
     return () => media.removeEventListener("change", sync);
-  }, []);
-  const [search, setSearch] = useState(false),
-    [selected, setSelected] = useState(null),
-    [route, setRoute] = useState(location.hash);
-  const p = content.profile;
-  const { scrollYProgress } = useScroll();
-  const progress = useSpring(scrollYProgress, { stiffness: 100, damping: 30 });
+  }, [finish]);
   useEffect(() => {
-    if (stopMotion) return;
-    const observer = new IntersectionObserver(
-      (entries) =>
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.animate(
-              [
-                { opacity: 0.35, transform: "translateY(22px)" },
-                { opacity: 1, transform: "translateY(0)" },
-              ],
-              { duration: 650, easing: "cubic-bezier(.2,.8,.2,1)" },
-            );
-            observer.unobserve(entry.target);
-          }
-        }),
-      { threshold: 0.12 },
-    );
-    document
-      .querySelectorAll(
-        ".work-exhibit,.new-toolkit,.credential-section,.new-journey,.archive-content",
-      )
-      .forEach((node) => observer.observe(node));
-    return () => observer.disconnect();
-  }, [stopMotion]);
-
-  useEffect(() => {
-    const key = (e) => {
-      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
-        e.preventDefault();
-        setSearch((s) => !s);
+    if (!page) return;
+    function key(event) {
+      if (
+        (event.metaKey || event.ctrlKey) &&
+        event.key.toLowerCase() === "k" &&
+        !document.querySelector("dialog[open]")
+      ) {
+        event.preventDefault();
+        setSearch((value) => !value);
       }
-    };
+    }
     window.addEventListener("keydown", key);
-    const hash = () => {
-      setRoute(location.hash);
-      if (location.hash.startsWith("#project/")) {
-        const project = content.projects.find(
-          (p) => p.id === location.hash.slice(9),
-        );
-        if (project) setSelected(project);
-      }
-    };
-    window.addEventListener("hashchange", hash);
-    hash();
-    return () => {
-      window.removeEventListener("keydown", key);
-      window.removeEventListener("hashchange", hash);
-    };
-  }, [content.projects]);
-  const page = content.pages.find((p) => route === `#/pages/${p.id}`);
-  useEffect(() => {
-    if (page) window.scrollTo(0, 0);
-    else if (route && !route.startsWith("#/"))
-      requestAnimationFrame(() =>
-        document.getElementById(route.slice(1))?.scrollIntoView(),
+    return () => window.removeEventListener("keydown", key);
+  }, [page]);
+  function target(hash) {
+    if (hash === "#notes") return document.getElementById("credentials");
+    if (hash === "#featured") return document.getElementById("work");
+    return (
+      document.getElementById(hash.slice(1)) || document.getElementById("main")
+    );
+  }
+  function interruptNavigation() {
+    currentTransition.current?.skipTransition();
+    cancelArrivals();
+    return ++generation.current;
+  }
+  function entryKey() {
+    return String(performance.timeOrigin) + "-" + ++nextOrigin.current;
+  }
+  function cancelArrivals() {
+    for (const animation of arrivals.current) animation.cancel();
+    arrivals.current.clear();
+  }
+  function revealDestination(hash) {
+    if (
+      !document.documentElement.classList.contains("ed-transfer") ||
+      !Element.prototype.animate ||
+      matchMedia("(prefers-reduced-motion: reduce)").matches
+    )
+      return;
+    const section = target(hash || "#home");
+    if (!section || section.getBoundingClientRect().bottom <= 0) return;
+    const animate = (element, frames, duration, delay = 0) => {
+      if (!element) return;
+      const animation = element.animate(frames, {
+        duration,
+        delay,
+        easing: "cubic-bezier(.18,.8,.22,1)",
+        fill: "backwards",
+      });
+      arrivals.current.add(animation);
+      animation.finished.then(
+        () => arrivals.current.delete(animation),
+        () => arrivals.current.delete(animation),
       );
-  }, [route, page]);
+    };
+    if (section.id === "home") {
+      animate(
+        section.querySelector(".ed-mark"),
+        [
+          { translate: "0 80%", opacity: 0 },
+          { translate: "0 0", opacity: 1 },
+        ],
+        1400,
+        240,
+      );
+      section.querySelectorAll(".ed-card").forEach((card, i) =>
+        animate(
+          card,
+          [
+            { translate: "0 100svh", rotate: "14deg" },
+            { translate: "0 0", rotate: "0deg" },
+          ],
+          1400,
+          760 + (3 - i) * 100,
+        ),
+      );
+    } else {
+      animate(
+        section.querySelector("h1,h2,.ed-lede"),
+        [
+          { translate: "0 22px", clipPath: "inset(0 0 95% 0)" },
+          { translate: "0 0", clipPath: "inset(0 0 -10% 0)" },
+        ],
+        740,
+        170,
+      );
+    }
+  }
+  function jump(hash) {
+    const el = target(hash);
+    if (!el) return;
+    const y =
+      !hash || hash === "#home" || hash.startsWith("#/pages/")
+        ? 0
+        : scrollY +
+          el.getBoundingClientRect().top -
+          (document.querySelector(".ed-header")?.offsetHeight || 0);
+    window.scrollTo({ top: y, behavior: "instant" });
+    el.tabIndex = -1;
+    el.focus({ preventScroll: true });
+  }
+  useLayoutEffect(() => {
+    const original = history.scrollRestoration;
+    history.scrollRestoration = "manual";
+    const initialHome =
+      document.documentElement.hasAttribute("data-home-opening");
+    document.documentElement.removeAttribute("data-home-opening");
+    if (initialHome) window.scrollTo({ top: 0, behavior: "instant" });
+    // Content is mounted before native hash targets on a cold visit.
+    if (location.hash && !location.hash.startsWith("#project/"))
+      jump(location.hash);
+    if (!history.state?.homeKey)
+      history.replaceState({ ...history.state, homeKey: entryKey() }, "");
+    function recordScroll() {
+      const key = history.state?.homeKey;
+      if (key) scrollPositions.current.set(key, scrollY);
+    }
+    window.addEventListener("scroll", recordScroll, { passive: true });
+    function restore() {
+      const ticket = interruptNavigation();
+      const hash = location.hash,
+        s = history.state;
+      const savedY = scrollPositions.current.get(s?.homeKey) ?? s?.homeY;
+      const project = records.current.find((p) => hash === "#project/" + p.id);
+      pageHandoff(currentTransition, lastRoute.current, hash, () => {
+        if (ticket !== generation.current) return;
+        flushSync(() => {
+          finish();
+          setSearch(false);
+          setRoute(hash);
+          setBase(project ? s?.homeBase || "" : hash);
+          setSelected(project || null);
+        });
+        if (typeof savedY === "number") {
+          window.scrollTo({ top: savedY, behavior: "instant" });
+          if (!project) {
+            const origin = origins.current.get(s.homeKey);
+            const focus = origin?.isConnected ? origin : target(hash);
+            if (focus) {
+              if (focus !== origin) focus.tabIndex = -1;
+              focus.focus({ preventScroll: true });
+            }
+          }
+        } else if (!project) jump(hash);
+        if (!project) revealDestination(hash);
+      });
+    }
+    // popstate covers both same-document hash navigations and our pushState entries.
+    window.addEventListener("popstate", restore);
+    return () => {
+      window.removeEventListener("popstate", restore);
+      window.removeEventListener("scroll", recordScroll);
+      interruptNavigation();
+      history.scrollRestoration = original;
+    };
+  }, [finish]);
+  useEffect(() => {
+    if (location.hash.startsWith("#project/")) {
+      const record = content.projects.find(
+        (p) => location.hash === "#project/" + p.id,
+      );
+      if (record) setSelected(record);
+    }
+  }, [content.projects]);
+  function remember(trigger) {
+    const key = history.state?.homeKey ?? entryKey();
+    scrollPositions.current.set(key, scrollY);
+    if (trigger) origins.current.set(key, trigger);
+    history.replaceState(
+      { ...history.state, homeY: scrollY, homeKey: key },
+      "",
+    );
+  }
+  function openProject(project, trigger = document.activeElement) {
+    interruptNavigation();
+    finish();
+    remember(trigger);
+    setSearch(false);
+    const hash = "#project/" + project.id;
+    history.pushState(
+      { homeModal: true, homeBase: base, homeY: scrollY },
+      "",
+      hash,
+    );
+    setRoute(hash);
+    setSelected(project);
+  }
+  function closeProject() {
+    if (history.state?.homeModal) {
+      history.back();
+      return;
+    }
+    setSelected(null);
+    setRoute(base);
+    history.replaceState(
+      {},
+      "",
+      location.pathname +
+        location.search +
+        (base.startsWith("#project/") ? "" : base),
+    );
+  }
+  function navigate(e) {
+    if (
+      e.defaultPrevented ||
+      e.button !== 0 ||
+      e.metaKey ||
+      e.ctrlKey ||
+      e.shiftKey ||
+      e.altKey
+    )
+      return;
+    const a = e.target.closest?.("a[href^='#']");
+    if (!a || a.target === "_blank" || a.hasAttribute("download")) return;
+    const hash = a.hash;
+    if (
+      !hash ||
+      hash === "#/studio" ||
+      hash === "#/syed" ||
+      hash.startsWith("#certificate/")
+    )
+      return;
+    const project = projectAt(hash);
+    if (project) {
+      e.preventDefault();
+      openProject(project, a);
+      return;
+    }
+    if (
+      !extraSections.has(hash) &&
+      !hash.startsWith("#/pages/") &&
+      !document.getElementById(hash.slice(1)) &&
+      !page
+    )
+      return;
+    e.preventDefault();
+    finish();
+    remember(a);
+    const ticket = interruptNavigation();
+    function change() {
+      if (generation.current !== ticket) return;
+      if ((location.hash || "#home") !== hash)
+        history.pushState({ homeKey: entryKey() }, "", hash);
+      flushSync(() => {
+        setRoute(hash);
+        setBase(hash);
+        setSelected(null);
+        setSearch(false);
+      });
+      jump(hash);
+      revealDestination(hash);
+    }
+    pageHandoff(currentTransition, route, hash, change);
+  }
+
   return (
-    <div className={`experience ${stopMotion ? "motion-paused" : ""}`}>
-      <motion.div className="new-progress" style={{ scaleX: progress }} />
+    <div
+      className={`experience ${page ? "" : "ed-shell"} ${opening && !page ? "is-opening" : ""} ${stopMotion ? "motion-paused" : ""}`}
+      inert={opening || undefined}
+      onClick={navigate}
+    >
       <a className="new-skip" href="#main">
         Skip to content
       </a>
-      <HomeNavigation onSearch={() => setSearch(true)} />
-      <main id="main">
+      {page ? (
+        <HomeNavigation onSearch={() => setSearch(true)} />
+      ) : (
+        <EditorialHeader
+          overlay={!!selected}
+          profile={profile}
+          route={route}
+        />
+      )}
+      <main id="main" className={page ? undefined : "ed-page"}>
         {page ? (
           <section className="new-custom-page">
             <a href="#home">← Home</a>
@@ -725,75 +1055,106 @@ export default function Experience({ content }) {
             <p>{page.body}</p>
           </section>
         ) : (
-          <>
-            <HomePage profile={p} paused={stopMotion} />
-            <ProjectDeck
-              projects={content.projects}
-              onOpen={setSelected}
-              paused={stopMotion}
-            />
-            <GitHubActivity paused={stopMotion} />
-            <SkillMeter skills={content.skills} />
-            <CertificateFan certificates={content.certificates} />
-            <Journey education={content.education} profile={p} />
-            <Archive
-              content={content}
-              onOpen={setSelected}
-              paused={stopMotion}
-            />
-
-            <div className="new-contact-wrap">
-              <Contact profile={p} />
-            </div>
-          </>
+          <EditorialContent
+            content={content}
+            opening={opening}
+            finish={finish}
+            paused={stopMotion}
+            activity={<GitHubActivity paused={stopMotion} />}
+            work={
+              <ProjectDeck
+                projects={content.projects}
+                onOpen={openProject}
+                paused={stopMotion}
+              />
+            }
+            education={
+              <Journey education={content.education} profile={profile} />
+            }
+            certifications={
+              <CertificateFan certificates={content.certificates} />
+            }
+            toolkit={
+              base === "#toolkit" && <SkillMeter skills={content.skills} />
+            }
+            archive={
+              (base === "#archive" || base.startsWith("#certificate/")) && (
+                <Archive
+                  content={content}
+                  onOpen={openProject}
+                  paused={stopMotion}
+                />
+              )
+            }
+            contact={
+              <div className="new-contact-wrap">
+                <Contact profile={profile} />
+              </div>
+            }
+          />
         )}
       </main>
-      <footer className="new-footer">
-        <div>
-          <span>HAVE SOMETHING IN MIND?</span>
-          <a href={`mailto:${p.email}`}>
-            Let’s make
-            <br />
-            <em>it happen.</em>
-            <ArrowUpRight />
-          </a>
-        </div>
-        <div className="new-footer-bottom">
-          <span>
-            © {new Date().getFullYear()} {p.name}
-          </span>
+      {page ? (
+        <footer className="new-footer">
           <div>
-            <a href={safeUrl(p.github)} {...ext}>
-              GitHub
-              <ArrowUpRight size={13} />
+            <span>HAVE SOMETHING IN MIND?</span>
+            <a href={`mailto:${profile.email}`}>
+              Let’s make
+              <br />
+              <em>it happen.</em>
+              <ArrowUpRight />
             </a>
-            <a href={safeUrl(p.linkedin)} {...ext}>
-              LinkedIn
-              <ArrowUpRight size={13} />
-            </a>
-            {content.pages.map((p) => (
-              <a key={p.id} href={`#/pages/${p.id}`}>
-                {p.title}
-              </a>
-            ))}
           </div>
-          <a href="#home">Back to top ↑</a>
-        </div>
-      </footer>
-      {search && (
+          <div className="new-footer-bottom">
+            <span>
+              © {new Date().getFullYear()} {profile.name}
+            </span>
+            <div>
+              <a href={safeUrl(profile.github)} {...ext}>
+                GitHub
+                <ArrowUpRight size={13} />
+              </a>
+              <a href={safeUrl(profile.linkedin)} {...ext}>
+                LinkedIn
+                <ArrowUpRight size={13} />
+              </a>
+              {content.pages.map((p) => (
+                <a key={p.id} href={`#/pages/${p.id}`}>
+                  {p.title}
+                </a>
+              ))}
+            </div>
+            <a href="#home">Back to top ↑</a>
+          </div>
+        </footer>
+      ) : (
+        <>
+          <EditorialFooter content={content} />
+          <EditorialPointer
+            paused={stopMotion}
+            blocked={!!selected}
+          />
+        </>
+      )}
+      {page && search && (
         <SearchMenu
           content={content}
           onClose={() => setSearch(false)}
-          onOpen={setSelected}
+          onOpen={openProject}
         />
-      )}{" "}
+      )}
       {selected && (
         <ProjectStory
           paused={stopMotion}
           project={selected}
           projects={content.projects}
-          onSelect={setSelected}
-          onClose={() => setSelected(null)}
+          onSelect={(p) => {
+            setSelected(p);
+            const hash = "#project/" + p.id;
+            history.replaceState(history.state, "", hash);
+            setRoute(hash);
+          }}
+          onClose={closeProject}
         />
       )}
     </div>

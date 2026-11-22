@@ -2783,7 +2783,8 @@
   border: 1px solid #e0e4ea;
 }
 .note-meta,
-.note-row small {
+.note-row small,
+.letter-message > small {
   font: 9px/1.2 monospace;
   color: #646f80;
   letter-spacing: 0.06em;
@@ -2814,6 +2815,11 @@
 }
 .note-row .ink-line {
   min-height: 32px;
+}
+.letter-message > small {
+  float: left;
+  width: 56px;
+  line-height: 32px;
 }
 .new-contact-wrap .letter .letter-message {
   height: 164px;

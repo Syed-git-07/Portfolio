@@ -3,7 +3,6 @@ import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import {
   motion,
   animate,
-  AnimatePresence,
   useMotionValue,
   useMotionValueEvent,
   useReducedMotion,
@@ -11,7 +10,7 @@ import {
   useSpring,
   useTransform,
 } from "motion/react";
-import { ArrowUpRight, Plus, X } from "lucide-react";
+import { ArrowUpRight, X } from "lucide-react";
 import { safeUrl } from "./content";
 import "./project-index.css";
 
@@ -40,12 +39,12 @@ function gallery(p) {
     i === 0 && src ? src : "/assets/projects/" + name + ".webp",
   ]);
 }
-function Links({ project }) {
+function Links({ project, expanded = false }) {
   return (
     <div className="folio-links">
       {[
-        ["Live site", project.url],
-        ["GitHub", project.source],
+        [expanded ? "View live project" : "Live site", project.url],
+        [expanded ? "View source" : "GitHub", project.source],
       ].map(([label, url]) => {
         const href = safeUrl(url);
         return (
@@ -114,8 +113,6 @@ function ProjectRow({
   active,
   paused,
   onOpen,
-  hover,
-  leave,
 }) {
   const ref = useRef(null),
     height = useMotionValue(420),
@@ -218,42 +215,38 @@ function ProjectRow({
         }
       >
         <div className="folio-face">
-          <div className="folio-surface" aria-hidden="true">
-            <motion.div
-              className="folio-photo reflective-photo"
-              style={paused ? {} : reflection.style}
-              transformTemplate={(v, transform) =>
-                !parseFloat(v.rotateX) && !parseFloat(v.rotateY)
-                  ? "none"
-                  : transform
-              }
-              data-image={project.id}
-            >
-              {images[0] && (
-                <motion.img
-                  style={paused ? {} : { filter: imageFilter }}
-                  src={images[0][1]}
-                  alt=""
-                />
-              )}
-              <span className="reflective-sweep" />
-            </motion.div>
+          <div className="folio-surface" data-image-entry="" aria-hidden="true">
+            <div className="folio-image-entry">
+              <motion.div
+                className="folio-photo reflective-photo"
+                style={paused ? {} : reflection.style}
+                transformTemplate={(v, transform) =>
+                  !parseFloat(v.rotateX) && !parseFloat(v.rotateY)
+                    ? "none"
+                    : transform
+                }
+                data-image={project.id}
+              >
+                {images[0] && (
+                  <motion.img
+                    style={paused ? {} : { filter: imageFilter }}
+                    src={images[0][1]}
+                    alt=""
+                  />
+                )}
+                <span className="reflective-sweep" />
+              </motion.div>
+            </div>
           </div>
           <button
             className="folio-trigger"
+            data-cursor="View project"
             aria-haspopup="dialog"
             aria-label={"Open " + project.title}
-            onPointerMove={(e) => {
-              reflection.move(e);
-              hover(e);
-            }}
-            onPointerLeave={() => {
-              reflection.reset();
-              leave();
-            }}
+            onPointerMove={reflection.move}
+            onPointerLeave={reflection.reset}
             onClick={() => {
               reflection.reset();
-              leave();
               ref.current.dataset.origin = "";
               onOpen(project);
             }}
@@ -295,8 +288,7 @@ function ProjectStack({ projects, onOpen, paused }) {
     [0, projects.length - 1],
   );
   const position = useSpring(target, { stiffness: 222, damping: 34 });
-  const [active, setActive] = useState(0),
-    [cursor, setCursor] = useState(false);
+  const [active, setActive] = useState(0);
   useMotionValueEvent(position, "change", (value) =>
     setActive(Math.max(0, Math.min(projects.length - 1, Math.round(value)))),
   );
@@ -322,24 +314,6 @@ function ProjectStack({ projects, onOpen, paused }) {
           Math.max(1, projects.length - 1),
       behavior: "instant",
     });
-  }
-  const x = useSpring(-100, { bounce: 0.001 }),
-    y = useSpring(-100, { bounce: 0.001 });
-  const leave = () => setCursor(false);
-  useEffect(() => {
-    window.addEventListener("scroll", leave, { passive: true });
-    return () => window.removeEventListener("scroll", leave);
-  }, []);
-  function hover(e) {
-    if (paused || e.pointerType !== "mouse") return;
-    if (!cursor) {
-      x.jump(e.clientX);
-      y.jump(e.clientY);
-    } else {
-      x.set(e.clientX);
-      y.set(e.clientY);
-    }
-    setCursor(true);
   }
   return (
     <section
@@ -386,38 +360,12 @@ function ProjectStack({ projects, onOpen, paused }) {
                 active,
                 position,
                 paused,
-                hover,
-                leave,
                 onOpen,
               }}
             />
           ))}
         </div>
       </div>
-      <motion.div
-        aria-hidden="true"
-        className="folio-pointer"
-        style={{ left: x, top: y, x: "-50%", y: "-50%" }}
-        animate={{
-          width: cursor ? 80 : 16,
-          height: cursor ? 32 : 16,
-          scale: cursor ? 1 : 0.3,
-          opacity: cursor ? 1 : 0,
-        }}
-        transition={{ ease: "easeInOut", duration: 0.15 }}
-      >
-        <AnimatePresence>
-          {cursor && (
-            <motion.span
-              initial={{ opacity: 0, scale: 0.6 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.6 }}
-            >
-              More <Plus size={16} />
-            </motion.span>
-          )}
-        </AnimatePresence>
-      </motion.div>
     </section>
   );
 }
@@ -434,6 +382,18 @@ function wordBoxes(element) {
   });
 }
 function sourceGeometry(row) {
+  const picture = row.querySelector("[data-picture]");
+  if (picture) {
+    const category = row.querySelector("[data-category]");
+    return {
+      box: picture.getBoundingClientRect(),
+      words: wordBoxes(row.querySelector("[data-title]")),
+      category: wordBoxes(category)[0] || category.getBoundingClientRect(),
+      radius: parseFloat(getComputedStyle(picture).borderRadius) || 14,
+      detailOpacity: 0, expansion: 1, tilt: "none", filter: "none", shine: 0,
+      shineX: "0%", shineY: "0%",
+    };
+  }
   const face = row.querySelector(".folio-face"),
     surface = row.querySelector(".folio-surface");
   const box = surface.getBoundingClientRect(),
@@ -460,7 +420,7 @@ export function ProjectStory({ project, projects, onSelect, onClose, paused }) {
   const host = useRef(null),
     scroller = useRef(null),
     closeButton = useRef(null);
-  const source = useRef(document.querySelector(".folio-row[data-origin]"));
+  const source = useRef(document.querySelector(".folio-row[data-origin], .ed-feature[data-origin], .ed-notes a[data-origin]"));
   const initialProject = useRef(project),
     currentProject = useRef(project);
   currentProject.current = project;
@@ -481,7 +441,7 @@ export function ProjectStory({ project, projects, onSelect, onClose, paused }) {
     const dialog = host.current,
       row = source.current;
     const trigger =
-      row?.querySelector(".folio-trigger") || document.activeElement;
+      row?.querySelector(".folio-trigger") || (row?.matches("a") ? row : document.activeElement);
     const overflow = document.body.style.overflow;
     if (row) row.dataset.origin = "";
     dialog.showModal();
@@ -503,8 +463,10 @@ export function ProjectStory({ project, projects, onSelect, onClose, paused }) {
     let glyphs = [],
       fragments = [],
       wordOffsets = [],
-      switchBack;
+      switchBack, artwork;
     function clear() {
+      artwork?.remove();
+      artwork = null;
       for (const el of [
         panel,
         hero,
@@ -540,6 +502,13 @@ export function ProjectStory({ project, projects, onSelect, onClose, paused }) {
       sourceBox = row?.isConnected ? sourceGeometry(row) : null;
       scroller.current.scrollTop = scroll;
       if (!sourceBox) return;
+      const originalArt = row.querySelector("[data-picture] .ed-art");
+      if (originalArt) {
+        artwork = originalArt.cloneNode(true);
+        artwork.classList.add("ed-flight-art");
+        artwork.setAttribute("aria-hidden", "true");
+        hero.appendChild(artwork);
+      }
       copy.inert = true;
       title.style.visibility = "hidden";
       for (const selector of [".folio-summary", ".folio-links"]) {
@@ -585,6 +554,7 @@ export function ProjectStory({ project, projects, onSelect, onClose, paused }) {
       if (!sourceBox) return;
       const t = Math.max(0, Math.min(1, value)),
         mix = (a, b) => a + (b - a) * t;
+      if (artwork) artwork.style.opacity = Math.max(0, 1 - t * 1.8);
       const a = sourceBox.box,
         b = target.box;
       const w = mix(a.width, b.width),
@@ -767,11 +737,14 @@ export function ProjectStory({ project, projects, onSelect, onClose, paused }) {
               <div className="project-dialog-heading">
                 <small>{project.category}</small>
                 <h2 id="folio-title">{project.title}</h2>
+                <div className="project-dialog-intro">
+                  <p>{project.description}</p>
+                  <Links project={project} expanded />
+                </div>
               </div>
             </header>
             <div className="project-dialog-copy">
               {project.subtitle && <h3>{project.subtitle}</h3>}
-              <p>{project.description}</p>
               {project.detail && project.detail !== project.description && (
                 <p>{project.detail}</p>
               )}
@@ -799,14 +772,14 @@ export function ProjectStory({ project, projects, onSelect, onClose, paused }) {
                         aria-expanded={i === slide}
                         onClick={() => setSlide(i === slide ? -1 : i)}
                       >
-                        {label}
+                        <img src={url} loading="lazy" alt="" />
+                        <span>{label}</span>
                       </button>
                     ))}
                   </figcaption>
                 </figure>
               )}
               <footer>
-                <Links project={project} />
                 {next && next.id !== project.id && (
                   <button
                     type="button"
