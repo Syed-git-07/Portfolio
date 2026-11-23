@@ -477,8 +477,7 @@ html:has(.ed-shell) {
 .ed-statement {
   height: 300svh;
 }
-.ed-pin,
-.ed-cap-pin {
+.ed-pin {
   position: sticky;
   top: 0;
   height: 100svh;
@@ -637,45 +636,6 @@ html:has(.ed-shell) {
 }
 .ed-shortcuts {
   margin-top: 32px;
-}
-.ed-cap-label p {
-  font-size: clamp(13px, 1.2vw, 19px);
-  color: #51575b;
-  line-height: 1.4;
-  margin-top: 0.4rem;
-}
-.ed-cap .ed-heading {
-  padding-bottom: 0;
-  margin-bottom: 0;
-}
-.ed-cap-pin {
-  display: grid;
-  grid-template-columns: 1.35fr 1fr;
-  align-items: center;
-  gap: 5vw;
-  padding: 6vw var(--gutter);
-}
-.ed-cap-images {
-  position: relative;
-  height: min(65svh, 42vw);
-  overflow: hidden;
-  border-radius: 16px;
-}
-.ed-cap-card {
-  position: absolute;
-  inset: 0;
-  transform-origin: bottom left;
-}
-.ed-cap-label h3 {
-  margin: 0.65rem 0;
-  font-size: clamp(30px, 3.7vw, 68px);
-  animation: ed-arrive 0.32s both;
-}
-.ed-static-caps {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 2rem;
-  padding: 4vw var(--gutter);
 }
 .ed-footer-slot {
   height: var(--footer-h, 70svh);
@@ -837,8 +797,7 @@ html.ed-transfer::view-transition-new(root) {
   .ed-heading .ed-link {
     font-size: 0.78rem;
   }
-  .ed-section h2,
-  .ed-cap h2 {
+  .ed-section h2 {
     font-size: clamp(34px, 8.5vw, 56px);
   }
   .ed-lede {
@@ -858,17 +817,6 @@ html.ed-transfer::view-transition-new(root) {
   }
   .ed-portrait {
     height: 52vw;
-  }
-  .ed-cap-pin {
-    grid-template-columns: 1fr;
-    align-content: center;
-    gap: 22px;
-  }
-  .ed-cap-images {
-    height: 47svh;
-  }
-  .ed-cap-label h3 {
-    font-size: 32px;
   }
   .ed-footer-slot,
   .ed-shell .ed-footer {
@@ -1143,65 +1091,6 @@ html.ed-menu-open {
 }
 .ed-header[data-away]:not([data-open]):not(:has(:focus-visible)) {
   transform: translateY(-100%);
-}
-.ed-skill-certificate,
-.ed-tool-list {
-  margin: 0;
-  height: 100%;
-  width: 100%;
-  background: #dfe9f2;
-  color: var(--ink);
-  padding: clamp(15px, 3vw, 48px);
-}
-.ed-skill-certificate {
-  display: grid;
-  grid-template-rows: minmax(0, 1fr) auto;
-  align-items: center;
-  gap: 12px;
-}
-.ed-skill-certificate img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-}
-.ed-skill-certificate figcaption {
-  font-size: 0.85rem;
-  text-align: center;
-}
-.ed-tool-list {
-  display: flex;
-  align-content: center;
-  align-items: center;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 0.55em;
-  list-style: none;
-  background: #14283c;
-  color: #edf5fc;
-  font-size: clamp(15px, 1.6vw, 28px);
-}
-.ed-tool-list li {
-  border: 1px solid #b3c6dc75;
-  border-radius: 0.4em;
-  padding: 0.3em 0.65em;
-}
-.ed-tool-list[data-skill="workflow"] {
-  background: #dcece5;
-  color: #143b2e;
-}
-.ed-tool-list[data-skill="workflow"] li {
-  border-color: #53776566;
-}
-.ed-static-caps .ed-tool-list,
-.ed-static-caps .ed-skill-certificate {
-  height: clamp(175px, 26vw, 320px);
-  border-radius: 12px;
-  margin-bottom: 14px;
-}
-@media (max-width: 700px) {
-  .ed-static-caps {
-    grid-template-columns: 1fr;
-  }
 }
 @media (prefers-reduced-motion: reduce) {
   .ed-header {

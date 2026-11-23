@@ -15,6 +15,7 @@ import {
   Layers,
 } from "lucide-react";
 import Modal from "./Modal";
+import CertificateDrawer from "./CertificateDrawer";
 import GitHubActivity from "./GitHubActivity";
 import Contact from "./Contact";
 import { ProjectDeck, ProjectStory } from "./WorkShowcase";
@@ -178,134 +179,6 @@ function SkillMeter({ skills }) {
           {current?.description || "Each lit dot represents one listed tool."}
         </p>
       </div>
-    </section>
-  );
-}
-
-function CertificateFan({ certificates }) {
-  const [fanned, setFanned] = useState(false);
-  const [selected, setSelected] = useState(0);
-  const [view, setView] = useState(null);
-  const item = certificates[selected % Math.max(certificates.length, 1)];
-  if (!item) return null;
-  return (
-    <section id="credentials" className="credential-section">
-      <div className="credential-heading">
-        <span className="micro-label">03 — LEARNING, COLLECTED</span>
-        <h2>
-          Earned.
-          <br />
-          <em>Not just listed.</em>
-        </h2>
-      </div>
-      <div
-        className="certificate-stage"
-        onPointerEnter={() => setFanned(true)}
-        onPointerLeave={() => setFanned(false)}
-        onFocusCapture={() => setFanned(true)}
-      >
-        <div className="fan-ground" />
-        {certificates.map((c, i) => {
-          const angle = (i - (certificates.length - 1) / 2) * (fanned ? 14 : 3);
-          return (
-            <motion.button
-              key={c.id}
-              className={`credential-card ${i === selected ? "selected" : ""}`}
-              style={{ zIndex: i, transformOrigin: "50% 380px" }}
-              animate={{ rotate: angle, y: i === selected ? -35 : 0 }}
-              whileHover={{ scale: 1.025 }}
-
-              transition={{ type: "spring", stiffness: 150, damping: 18 }}
-              onClick={() => {
-                setSelected(i);
-                setFanned(true);
-                setView(c);
-              }}
-              aria-label={`Preview ${c.title}`}
-              aria-pressed={i === selected}
-            >
-              <span className="card-edge-number">0{i + 1}</span>
-              <div className="credential-symbol">
-                N<span>PTEL</span>
-              </div>
-              <img
-                src={certImage(c)}
-                onError={(e) => {
-                  e.currentTarget.hidden = true;
-                }}
-                alt=""
-                draggable="false"
-              />
-              <div className="credential-card-label">
-                <span>{c.title}</span>
-                <b>{c.score}</b>
-              </div>
-            </motion.button>
-          );
-        })}
-      </div>
-      <div className="credential-selected">
-        <div>
-          <span className="micro-label">
-            CERTIFICATE {selected + 1} / {certificates.length}
-          </span>
-          <AnimatePresence mode="wait">
-            <motion.h3
-              key={item.id}
-              initial={{ opacity: 0, y: 8 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -8 }}
-            >
-              {item.title}
-            </motion.h3>
-          </AnimatePresence>
-          <p>{item.issuer}</p>
-        </div>
-      </div>
-      <div
-        className="certificate-dots certificate-names"
-        aria-label="Choose certificate"
-      >
-        {certificates.map((c, i) => (
-          <button
-            key={c.id}
-            onClick={() => {
-              setSelected(i);
-              setView(c);
-            }}
-            aria-label={`Certificate ${i + 1}: ${c.title}`}
-            aria-pressed={i === selected}
-          >
-            {c.title}
-          </button>
-        ))}
-      </div>
-      {view && (
-        <Modal title={view.title} onClose={() => setView(null)}>
-          <div className="new-cert-modal">
-            <img
-              src={certImage(view)}
-              alt={view.title}
-              onError={(e) => {
-                e.currentTarget.hidden = true;
-              }}
-            />
-            <h2>{view.title}</h2>
-            <p>
-              {view.issuer} · {view.score}
-            </p>
-            <a
-              className="new-button"
-              download
-              href={safeUrl(view.file, "media")}
-              {...ext}
-            >
-              Download certificate
-              <Download size={16} />
-            </a>
-          </div>
-        </Modal>
-      )}
     </section>
   );
 }
@@ -785,7 +658,7 @@ export default function Experience({ content }) {
     return () => window.removeEventListener("keydown", key);
   }, [page]);
   function target(hash) {
-    if (hash === "#notes") return document.getElementById("credentials");
+    if (hash === "#notes" || hash === "#certifications") return document.getElementById("credentials");
     if (hash === "#featured") return document.getElementById("work");
     return (
       document.getElementById(hash.slice(1)) || document.getElementById("main")
@@ -1072,7 +945,7 @@ export default function Experience({ content }) {
               <Journey education={content.education} profile={profile} />
             }
             certifications={
-              <CertificateFan certificates={content.certificates} />
+              content.certificates.length > 0 && <CertificateDrawer certificates={content.certificates} paused={stopMotion} />
             }
             toolkit={
               base === "#toolkit" && <SkillMeter skills={content.skills} />

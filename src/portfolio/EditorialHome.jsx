@@ -3,7 +3,6 @@ import {
   motion,
   useScroll,
   useTransform,
-  useMotionValueEvent,
 } from "motion/react";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { safeUrl } from "./content";
@@ -29,7 +28,6 @@ const hue = {
   youtube: "#e7b586",
   ims: "#8984c4",
 };
-const number = (n) => String(n).padStart(2, "0");
 function ArrowLink({ href, children }) {
   return (
     <a className="ed-link" href={href}>
@@ -552,113 +550,6 @@ function Profile({ content, paused }) {
     </section>
   );
 }
-const credentialForSkill = {
-  languages: "python",
-  intelligence: "deep-learning",
-};
-function CapabilityEvidence({ skill, certificates }) {
-  const certificate = certificates.find(
-    (c) => c.id === credentialForSkill[skill.id],
-  );
-  const src = certificate && safeUrl(certificate.image, "media");
-  if (src)
-    return (
-      <figure className="ed-skill-certificate">
-        <img src={src} alt={certificate.title} loading="lazy" />
-        <figcaption>
-          {certificate.issuer} · {certificate.score}
-        </figcaption>
-      </figure>
-    );
-  const tools = skill.items
-    .split(",")
-    .map((tool) => tool.trim())
-    .filter(Boolean);
-  return (
-    <ul className="ed-tool-list" data-skill={skill.id}>
-      {tools.map((tool, i) => (
-        <li key={i}>{tool}</li>
-      ))}
-    </ul>
-  );
-}
-function CapabilityCard({ skill, certificates, index, count, progress }) {
-  const y = useTransform(
-    progress,
-    [
-      Math.max(0, (index - 1) / Math.max(1, count - 1)),
-      index / Math.max(1, count - 1) || 1,
-    ],
-    ["110%", "0%"],
-  );
-  const r = useTransform(y, ["0%", "110%"], [0, 8]);
-  return (
-    <motion.div className="ed-cap-card" style={index ? { y, rotate: r } : {}}>
-      <CapabilityEvidence skill={skill} certificates={certificates} />
-    </motion.div>
-  );
-}
-function Capabilities({ skills, certificates, paused }) {
-  const ref = useRef(null);
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start start", "end end"],
-  });
-  const [active, setActive] = useState(0);
-  useMotionValueEvent(scrollYProgress, "change", (v) =>
-    setActive(Math.min(skills.length - 1, Math.round(v * (skills.length - 1)))),
-  );
-
-  return (
-    <section id="capabilities" className="ed-cap ed-zone">
-      <div className="ed-section ed-heading">
-        <h2>
-          My <em>capabilities</em>
-        </h2>
-        <ArrowLink href="#toolkit">Explore skills</ArrowLink>
-      </div>
-      {paused ? (
-        <div className="ed-static-caps">
-          {skills.map((s) => (
-            <div key={s.id}>
-              <CapabilityEvidence skill={s} certificates={certificates} />
-              <h3>{s.title}</h3>
-              <p>{s.description}</p>
-            </div>
-          ))}
-        </div>
-      ) : (
-        <div
-          className="ed-cap-track"
-          ref={ref}
-          style={{ height: Math.max(1, skills.length) * 100 + "svh" }}
-        >
-          <div className="ed-cap-pin">
-            <div className="ed-cap-images">
-              {skills.map((s, i) => (
-                <CapabilityCard
-                  key={s.id}
-                  skill={s}
-                  certificates={certificates}
-                  index={i}
-                  count={skills.length}
-                  progress={scrollYProgress}
-                />
-              ))}
-            </div>
-            <div className="ed-cap-label">
-              <small>
-                {number(active + 1)} / {number(skills.length)}
-              </small>
-              <h3 key={skills[active]?.id}>{skills[active]?.title}</h3>
-              <p>{skills[active]?.description}</p>
-            </div>
-          </div>
-        </div>
-      )}
-    </section>
-  );
-}
 function useMediaEntrance(paused) {
   useLayoutEffect(() => {
     if (paused || !window.IntersectionObserver) return;
@@ -703,7 +594,7 @@ export function EditorialContent({
   archive,
   contact,
 }) {
-  const { profile, projects, skills, certificates } = content;
+  const { profile, projects } = content;
   useMediaEntrance(paused);
   useEffect(() => {
     if (paused) return;
@@ -750,11 +641,8 @@ export function EditorialContent({
       {activity}
       {work}
       {education}
-      {skills.length > 0 && (
-        <Capabilities {...{ skills, certificates, paused }} />
-      )}
-      {toolkit}
       {certifications}
+      {toolkit}
       {archive}
       {contact}
     </>
